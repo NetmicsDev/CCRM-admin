@@ -18,11 +18,12 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   return (
-    <html lang="kr" className={`${pretendard.variable} text-main-1 font-light`}>
-      <body className="min-h-screen">{children}</body>
+    <html lang="kr" className={`${pretendard.variable}`}>
+      <body className={`${pretendard.className} min-h-screen font-light`}>
+        {children}
+      </body>
     </html>
   );
 }
