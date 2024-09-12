@@ -30,7 +30,7 @@ export default function Sidebar() {
             </NavItem>
           </li>
           <li>
-            <NavItem href="/courses" title="강의 업로드/리스트">
+            <NavItem href="/course" title="강의 업로드/리스트">
               <LibraryBig />
             </NavItem>
           </li>
@@ -39,15 +39,15 @@ export default function Sidebar() {
               title="고객센터"
               items={[
                 {
-                  href: "/notice",
+                  href: "/service-center/notice",
                   title: "공지사항",
                 },
                 {
-                  href: "/faq",
+                  href: "/service-center/faq",
                   title: "FAQ",
                 },
                 {
-                  href: "/inquiry",
+                  href: "/service-center/inquiry",
                   title: "1:1 문의",
                 },
               ]}
@@ -56,7 +56,7 @@ export default function Sidebar() {
             </NavGroup>
           </li>
           <li>
-            <NavItem href="/billing" title="청구/약관 링크 관리">
+            <NavItem href="/outlink" title="청구/약관 링크 관리">
               <FileSymlink />
             </NavItem>
           </li>
