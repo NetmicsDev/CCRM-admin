@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Sidebar from "./_components/Sidebar";
 
 export const metadata: Metadata = {
   title: "CCRM 관리자",
@@ -21,8 +22,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="kr" className={`${pretendard.variable}`}>
-      <body className={`${pretendard.className} min-h-screen font-light`}>
-        {children}
+      <body
+        className={`${pretendard.className} flex h-screen bg-gray-100 font-light`}
+      >
+        <Sidebar />
+        <div className="flex h-screen flex-1 overflow-y-auto">{children}</div>
       </body>
     </html>
   );
