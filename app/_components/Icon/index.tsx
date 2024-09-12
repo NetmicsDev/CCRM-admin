@@ -2,6 +2,7 @@
 /// 그 중에서만 dynamic으로 호출할 수 있도록 하는 걸로 결정
 import {
   type LucideProps,
+  ChevronLeft,
   ChevronDown,
   ChevronUp,
   ChevronRight,
@@ -13,9 +14,12 @@ import {
   WalletCards,
   Eye,
   EyeOff,
+  MoreVertical,
+  Edit2,
 } from "lucide-react";
 
 const iconMap = {
+  "chevron-left": ChevronLeft,
   "chevron-right": ChevronRight,
   "chevron-down": ChevronDown,
   "chevron-up": ChevronUp,
@@ -27,6 +31,8 @@ const iconMap = {
   "wallet-cards": WalletCards,
   eye: Eye,
   "eye-off": EyeOff,
+  "more-vertical": MoreVertical,
+  "edit-2": Edit2,
 };
 export type IconType = keyof typeof iconMap;
 

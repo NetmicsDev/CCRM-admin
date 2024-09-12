@@ -1,18 +1,18 @@
 import React from "react";
 
 export const Footer = () => (
-  <footer className="text-center p-4 text-sm text-gray-500 border-t">
-    <p>© 2024- dashboard. Design & develop by Artificial. co.ltd.</p>
-    <div className="mt-2">
-      <a href="#" className="mx-2 hover:underline">
+  <footer className="flex justify-between text-center px-6 py-4  text-sm text-gray-500">
+    <div>
+      {/* <a href="#" className="mx-2 hover:underline">
         Documentation
-      </a>
-      <a href="#" className="mx-2 hover:underline">
+        </a>
+        <a href="#" className="mx-2 hover:underline">
         Privacy Policy
-      </a>
-      <a href="#" className="mx-2 hover:underline">
+        </a>
+        <a href="#" className="mx-2 hover:underline">
         FAQs
-      </a>
+        </a> */}
     </div>
+    <p>© 2024- dashboard. Design & develop by Artificial. co.ltd.</p>
   </footer>
 );
