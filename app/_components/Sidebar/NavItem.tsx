@@ -17,7 +17,7 @@ export const NavItem: React.FC<NavItemProps> = ({ href, title, icon }) => {
 
   const baseClasses =
     "flex flex-row py-2 px-2 rounded transition-colors duration-200 items-center text-gray-700 ";
-  const activeClasses = "bg-blue-50 font-medium";
+  const activeClasses = "bg-blue-50 font-medium pointer-events-none";
   const inactiveClasses = "hover:bg-gray-100";
 
   const classes = `${baseClasses} ${

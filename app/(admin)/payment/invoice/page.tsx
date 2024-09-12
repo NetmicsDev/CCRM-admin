@@ -8,13 +8,10 @@ import { Footer } from "../../../_components/Footer";
 export default function InvoicePage() {
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
-      <Header />
-      <Breadcrumb />
       <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white">
         <InvoiceList />
         <Pagination />
       </main>
-      <Footer />
     </div>
   );
 }
