@@ -6,11 +6,3 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
-
-/* for lucide */
-.lucide {
-  width: 20px;
-  height: 20px;
-  stroke-width: 2px;
-  color: #4a5154;
-}

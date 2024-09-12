@@ -1,11 +1,3 @@
-import {
-  FileSymlink,
-  LayoutDashboard,
-  LibraryBig,
-  MessageCircleWarning,
-  Users,
-  WalletCards,
-} from "lucide-react";
 import { NavItem } from "./NavItem";
 import Image from "next/image";
 import NavGroup from "./NavGroup";
@@ -25,18 +17,23 @@ export default function Sidebar() {
       <nav>
         <ul className="space-y-2">
           <li>
-            <NavItem href="/dashboard" title="대시보드">
-              <LayoutDashboard />
-            </NavItem>
+            <NavItem
+              href="/dashboard"
+              title="대시보드"
+              icon="layout-dashboard"
+            />
           </li>
           <li>
-            <NavItem href="/course" title="강의 업로드/리스트">
-              <LibraryBig />
-            </NavItem>
+            <NavItem
+              href="/course"
+              title="강의 업로드/리스트"
+              icon="library-big"
+            />
           </li>
           <li>
             <NavGroup
               title="고객센터"
+              icon="message-circle-warning"
               items={[
                 {
                   href: "/service-center/notice",
@@ -51,26 +48,25 @@ export default function Sidebar() {
                   title: "1:1 문의",
                 },
               ]}
-            >
-              <MessageCircleWarning />
-            </NavGroup>
+            />
           </li>
           <li>
-            <NavItem href="/outlink" title="청구/약관 링크 관리">
-              <FileSymlink />
-            </NavItem>
+            <NavItem
+              href="/outlink"
+              title="청구/약관 링크 관리"
+              icon="file-symlink"
+            />
           </li>
         </ul>
         <p className="ml-2 mt-6 mb-2 text-sm text-gray-500">관리 페이지</p>
         <ul className="space-y-2">
           <li>
-            <NavItem href="/user" title="유저 리스트">
-              <Users />
-            </NavItem>
+            <NavItem href="/user" title="유저 리스트" icon="users" />
           </li>
           <li>
             <NavGroup
               title="결제 관리"
+              icon="wallet-cards"
               items={[
                 {
                   href: "/payment/invoice",
@@ -85,9 +81,7 @@ export default function Sidebar() {
                   title: "결제 정보",
                 },
               ]}
-            >
-              <WalletCards />
-            </NavGroup>
+            />
           </li>
         </ul>
       </nav>

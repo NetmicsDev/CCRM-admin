@@ -3,14 +3,15 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Icon, { IconType } from "../Icon";
 
 interface NavItemProps {
   href: string;
   title: string;
-  children?: React.ReactNode;
+  icon?: IconType;
 }
 
-export const NavItem: React.FC<NavItemProps> = ({ href, title, children }) => {
+export const NavItem: React.FC<NavItemProps> = ({ href, title, icon }) => {
   const pathname = usePathname();
   const isActive = pathname.startsWith(href);
 
@@ -25,7 +26,9 @@ export const NavItem: React.FC<NavItemProps> = ({ href, title, children }) => {
 
   return (
     <Link href={href} className={classes}>
-      {children}
+      {icon && (
+        <Icon type={icon} className="w-5 h-5 stroke-gray-700" strokeWidth={2} />
+      )}
       <span className="mx-2">{title}</span>
     </Link>
   );

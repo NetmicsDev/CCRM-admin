@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TextField } from "../_components/Input";
-import { Eye, EyeOff } from "lucide-react";
+import Icon from "../_components/Icon";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -52,17 +52,11 @@ export default function LoginForm() {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         trailingIcon={
-          <button
-            type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+          <Icon
+            type={showPassword ? "eye-off" : "eye"}
+            className="w-5 h-5 stroke-gray-700"
             onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? (
-              <EyeOff className="h-5 w-5 text-gray-400" />
-            ) : (
-              <Eye className="h-5 w-5 text-gray-400" />
-            )}
-          </button>
+          />
         }
       />
 
