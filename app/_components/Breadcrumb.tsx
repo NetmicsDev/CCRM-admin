@@ -25,7 +25,7 @@ export const Breadcrumb: React.FC = () => {
   const pathnames = pathname.split("/").filter((x) => x);
 
   return (
-    <nav className="text-sm p-4" aria-label="Breadcrumb">
+    <nav className="print:hidden text-sm p-4" aria-label="Breadcrumb">
       <ol className="flex items-center space-x-2">
         <li>
           <Link href="/" className="text-gray-500 hover:text-gray-700">

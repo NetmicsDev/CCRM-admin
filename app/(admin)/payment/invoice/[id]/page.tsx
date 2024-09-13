@@ -1,24 +1,24 @@
-import React from "react";
+"use client";
+
 import { Download, Printer } from "lucide-react";
 
-const InvoiceDetail: React.FC = () => {
+export default function InvoiceDetailPage() {
   return (
-    <>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-2xl font-bold">CCRM</h1>
-        <div className="space-x-2">
-          <button className="px-4 py-2 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 transition-colors">
-            <Download className="inline-block w-4 h-4 mr-2" />
-            다운로드
-          </button>
-          <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition-colors">
-            <Printer className="inline-block w-4 h-4 mr-2" />
-            인보이스 프린트
+    <div id="invoice-detail" className="px-4 overflow-auto h-full">
+      <div className="flex justify-between items-center py-2 sticky top-0 bg-white">
+        <h1 className="text-3xl font-bold">CCRM</h1>
+        <div className="print:hidden">
+          <button
+            className="flex items-center px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 font-medium text-sm"
+            onClick={() => window.print()}
+          >
+            <Printer className="inline-flex w-4 h-4 mr-2" />
+            다운로드 및 프린트
           </button>
         </div>
       </div>
 
-      <p className="text-gray-600 mb-8">
+      <p className="text-gray-600 my-6">
         안녕하세요 정은우님,
         <br />
         이것은 당신이 월 후불 구독 10000에 지불한 10,000₩에 대한 영수증입니다.
@@ -116,8 +116,6 @@ const InvoiceDetail: React.FC = () => {
         저희와 거래해 주셔서 진심으로 감사드립니다. 귀하의 무궁한 발전을
         기대합니다.
       </p>
-    </>
+    </div>
   );
-};
-
-export default InvoiceDetail;
+}

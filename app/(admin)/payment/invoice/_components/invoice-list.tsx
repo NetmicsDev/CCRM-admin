@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Icon from "@/app/_components/Icon";
 import { Table, Td } from "@/app/_components/Table";
 import cn from "@/app/_utils/cn";
+import Link from "next/link";
 
 // Mock data for invoices
 const invoices = [
@@ -60,10 +61,13 @@ export const InvoiceList: React.FC = () => {
             {info.status === 0 ? "보류중" : "결제 완료"}
           </Td>
           <Td>{info.amount.toLocaleString("ko-KR")}원</Td>
-          <Td className="w-0 space-x-2">
-            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-              <Icon type="download" className="h-5 w-5" />
-            </button>
+          <Td className="w-0 space-x-2 items-center">
+            <Link
+              href={`/payment/invoice/${info.id}`}
+              className="inline-flex p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
+            >
+              <Icon type="file-search" className="h-5 w-5" />
+            </Link>
             <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
               <Icon type="more-vertical" className="h-5 w-5" />
             </button>

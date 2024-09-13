@@ -4,7 +4,7 @@ import NavGroup from "./NavGroup";
 
 export default function Sidebar() {
   return (
-    <aside className="w-64 bg-white border-r h-screen p-4">
+    <aside className="print:hidden w-64 bg-white border-r h-screen p-4">
       <div className="flex items-center mb-4 p-2">
         <Image
           src="/images/logo.svg"
@@ -71,10 +71,6 @@ export default function Sidebar() {
                 {
                   href: "/payment/invoice",
                   title: "인보이스",
-                },
-                {
-                  href: "/payment/history",
-                  title: "인보이스 내역",
                 },
                 {
                   href: "/payment/info",
