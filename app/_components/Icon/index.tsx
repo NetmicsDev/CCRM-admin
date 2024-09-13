@@ -21,6 +21,8 @@ import {
   UserCircle,
   Download,
   FileSearch,
+  Printer,
+  Trash,
 } from "lucide-react";
 
 const iconMap = {
@@ -43,6 +45,8 @@ const iconMap = {
   "user-circle": UserCircle,
   download: Download,
   "file-search": FileSearch,
+  printer: Printer,
+  trash: Trash,
 };
 export type IconType = keyof typeof iconMap;
 

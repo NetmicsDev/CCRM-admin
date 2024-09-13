@@ -1,5 +1,6 @@
 "use client";
 
+import Icon from "@/app/_components/Icon";
 import { Download, Printer } from "lucide-react";
 
 export default function InvoiceDetailPage() {
@@ -12,7 +13,7 @@ export default function InvoiceDetailPage() {
             className="flex items-center px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 font-medium text-sm"
             onClick={() => window.print()}
           >
-            <Printer className="inline-flex w-4 h-4 mr-2" />
+            <Icon type="printer" className="inline-flex w-4 h-4 mr-2" />
             다운로드 및 프린트
           </button>
         </div>

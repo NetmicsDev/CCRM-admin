@@ -1,3 +1,4 @@
+import Dropdown from "@/app/_components/Dropdown";
 import Icon from "@/app/_components/Icon";
 import { Table, Td } from "@/app/_components/Table";
 import cn from "@/app/_utils/cn";
@@ -87,7 +88,21 @@ export default function PaymentHistory() {
           </Td>
           <Td>{payment.amount.toLocaleString()} 원</Td>
           <Td>
-            <Icon type="more-vertical" className="w-4 h-4" />
+            <Dropdown
+              options={[
+                {
+                  icon: "printer",
+                  label: "다운로드 및 프린트",
+                },
+                {
+                  icon: "trash",
+                  label: "삭제",
+                  color: "red-500",
+                },
+              ]}
+            >
+              <Icon type="more-vertical" className="w-4 h-4 m-2" />
+            </Dropdown>
           </Td>
         </tr>
       )}
