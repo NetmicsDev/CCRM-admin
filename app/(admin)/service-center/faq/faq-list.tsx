@@ -3,28 +3,39 @@
 import React, { useState } from "react";
 import Icon from "@/app/_components/Icon";
 import { Table, Td } from "@/app/_components/Table";
-import cn from "@/app/_utils/cn";
 
-// Mock data for outlinks
-const outlinks = [
+// Mock data for faqs
+const faqs = [
   {
     id: "EKG464SJFN17",
-    company: "KB손해보험",
-    category: "청구/손해보험",
+    faq: "회원가입은 어떻게 하나요?",
+    category: "가입 관련",
     updateDate: "2024년 9월 25일",
   },
   {
-    id: "EKG464SJFN17",
-    company: "KB손해보험",
-    category: "약관/생명보험",
+    id: "EKG464SJFN18",
+    faq: "회원가입은 어떻게 하나요?",
+    category: "결제 관련",
+    updateDate: "2024년 9월 25일",
+  },
+  {
+    id: "EKG464SJFN19",
+    faq: "회원가입은 어떻게 하나요?",
+    category: "연동 관련",
+    updateDate: "2024년 9월 25일",
+  },
+  {
+    id: "EKG464SJFN20",
+    faq: "회원가입은 어떻게 하나요?",
+    category: "프로그램 관련",
     updateDate: "2024년 9월 25일",
   },
 ];
 
-export const OutlinkList: React.FC = () => {
+export const FaqList: React.FC = () => {
   const columns = [
     { label: "NO.", key: "id" },
-    { label: "회사명", key: "company" },
+    { label: "FAQ", key: "content" },
     { label: "카테고리", key: "category" },
     { label: "업데이트 날짜", key: "updateDate" },
     { label: "", key: "actions" },
@@ -33,21 +44,13 @@ export const OutlinkList: React.FC = () => {
   return (
     <Table
       columns={columns}
-      data={outlinks}
-      renderRow={(outlink) => (
-        <tr key={outlink.id} className="hover:bg-gray-50">
-          <Td>{outlink.id}</Td>
-          <Td>
-            <div className="flex items-center gap-1">
-              <Icon
-                type="user-circle"
-                className="inline-block w-5 h-5 stroke-gray-700"
-              />
-              <span>{outlink.company}</span>
-            </div>
-          </Td>
-          <Td>{outlink.category}</Td>
-          <Td>{outlink.updateDate}</Td>
+      data={faqs}
+      renderRow={(faq) => (
+        <tr key={faq.id} className="hover:bg-gray-50">
+          <Td>{faq.id}</Td>
+          <Td>{faq.content}</Td>
+          <Td>{faq.category}</Td>
+          <Td>{faq.updateDate}</Td>
           <Td className="w-0 space-x-2">
             <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
               <Icon type="square-pen" className="w-5 h-5" />
@@ -62,4 +65,4 @@ export const OutlinkList: React.FC = () => {
   );
 };
 
-export default OutlinkList;
+export default FaqList;

@@ -3,10 +3,12 @@ import { UserList } from "./_components/user-list";
 
 export default function UserPage() {
   return (
-    <main className="flex-1 overflow-y-auto bg-white rounded-lg p-6">
+    <div className="flex flex-col h-full">
       <h1 className="text-xl font-semibold mb-4">유저 리스트</h1>
-      <UserList />
+      <div className="block flex-1 overflow-auto">
+        <UserList />
+      </div>
       <Pagination />
-    </main>
+    </div>
   );
 }

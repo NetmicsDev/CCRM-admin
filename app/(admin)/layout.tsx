@@ -12,7 +12,7 @@ export default function RootLayout({
       <Sidebar />
       <div className="flex flex-col h-screen flex-1 overflow-y-auto">
         <Breadcrumb />
-        <div className="flex-1 mx-6 2xl:mx-10 overflow-y-scroll">
+        <div className="flex-1 mx-6 2xl:mx-10 h-full overflow-hidden bg-white rounded-lg p-6 shadow-md">
           {children}
         </div>
         <Footer />

@@ -7,10 +7,12 @@ import { Footer } from "../../../_components/Footer";
 
 export default function InvoicePage() {
   return (
-    <main className="flex-1 overflow-y-auto bg-white rounded-lg p-6">
+    <div className="flex flex-col h-full">
       <h1 className="text-xl font-semibold mb-4">인보이스</h1>
-      <InvoiceList />
+      <div className="block flex-1 overflow-auto">
+        <InvoiceList />
+      </div>
       <Pagination />
-    </main>
+    </div>
   );
 }

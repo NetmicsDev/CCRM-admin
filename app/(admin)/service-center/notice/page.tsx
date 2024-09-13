@@ -1,12 +1,14 @@
 import { Pagination } from "@/app/_components/Pagination";
-import { NoticeList } from "../notice-list";
+import { NoticeList } from "./notice-list";
 
 export default function NoticePage() {
   return (
-    <main className="flex-1 overflow-y-auto bg-white rounded-lg p-6">
+    <div className="flex flex-col h-full">
       <h1 className="text-xl font-semibold mb-4">공지사항</h1>
-      <NoticeList />
+      <div className="block flex-1 overflow-auto">
+        <NoticeList />
+      </div>
       <Pagination />
-    </main>
+    </div>
   );
 }

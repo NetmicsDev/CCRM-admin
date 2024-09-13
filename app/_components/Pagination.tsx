@@ -1,7 +1,7 @@
 import React from "react";
 
 export const Pagination = () => (
-  <div className="flex justify-between items-center p-4 border-t">
+  <div className="flex justify-between items-center pt-4">
     <span className="text-sm text-gray-500">16개 항목 중 1-8개 항목 표시</span>
     <div className="flex space-x-2">
       <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">

@@ -1,128 +1,77 @@
 "use client";
 
 import React, { useState } from "react";
-import { Download, MoreVertical } from "lucide-react";
+import Icon from "@/app/_components/Icon";
+import { Table, Td } from "@/app/_components/Table";
+import cn from "@/app/_utils/cn";
 
+// Mock data for invoices
 const invoices = [
   {
     id: "EKG464SJFN17",
-    description: "월 정액 구독 10000",
-    country: "대한민국",
-    vatNo: "87956621",
+    type: "월 후불 구독 10000",
+    name: "김재훈",
+    vat: "87956621",
     date: "2024년 9월 25일",
-    status: "보류중",
-    amount: "10,000 ₩",
+    status: 0,
+    amount: 10000,
   },
   {
     id: "EKG464SJFN18",
-    description: "월 정액 구독 10000",
-    country: "대한민국",
-    vatNo: "87956622",
+    type: "월 후불 구독 10000",
+    name: "김재훈",
+    vat: "87956621",
     date: "2024년 9월 25일",
-    status: "결제완료",
-    amount: "10,000 ₩",
+    status: 1,
+    amount: 10000,
   },
-  // Add more invoice data here...
 ];
 
-export const InvoiceList = () => {
-  const [selectedInvoices, setSelectedInvoices] = useState<string[]>([]);
-
-  const toggleAll = () => {
-    if (selectedInvoices.length === invoices.length) {
-      setSelectedInvoices([]);
-    } else {
-      setSelectedInvoices(invoices.map((invoice) => invoice.id));
-    }
-  };
-
-  const toggleInvoice = (id: string) => {
-    setSelectedInvoices((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
-  };
+export const InvoiceList: React.FC = () => {
+  const columns = [
+    { label: "NO.", key: "id" },
+    { label: "결제 유형", key: "type" },
+    { label: "이름", key: "name" },
+    { label: "VAT NO.", key: "vat" },
+    { label: "날짜", key: "date" },
+    { label: "상태", key: "status" },
+    { label: "결제 금액", key: "amount" },
+    { label: "", key: "actions" },
+  ];
 
   return (
-    <div className="overflow-x-auto">
-      <table className="min-w-full bg-white">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="w-12 py-3 px-4 text-left"></th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              NO.
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              결제 유형
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              이름
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              VAT NO.
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              날짜
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              상태
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              결제 금액
-            </th>
-            <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              내용
-            </th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody className="divide-y divide-gray-200 text-sm">
-          {invoices.map((invoice) => (
-            <tr key={invoice.id} className="hover:bg-gray-50">
-              <td className="py-4 px-4">
-                <input
-                  type="checkbox"
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  checked={selectedInvoices.includes(invoice.id)}
-                  onChange={() => toggleInvoice(invoice.id)}
-                />
-              </td>
-              <td className="py-4 px-4 whitespace-nowrap">{invoice.id}</td>
-              <td className="py-4 px-4 whitespace-nowrap">
-                {invoice.description}
-              </td>
-              <td className="py-4 px-4 whitespace-nowrap">
-                <div className="flex items-center space-x-2">
-                  <span>{invoice.country}</span>
-                </div>
-              </td>
-              <td className="py-4 px-4 whitespace-nowrap">{invoice.vatNo}</td>
-              <td className="py-4 px-4 whitespace-nowrap">{invoice.date}</td>
-              <td className="py-4 px-4 whitespace-nowrap">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs ${
-                    invoice.status === "보류중"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-green-100 text-green-800"
-                  }`}
-                >
-                  {invoice.status}
-                </span>
-              </td>
-              <td className="py-4 px-4 whitespace-nowrap">{invoice.amount}</td>
-              <td className="py-4 px-4 whitespace-nowrap">
-                <button className="p-1 rounded hover:bg-gray-200">
-                  <Download className="h-4 w-4 text-gray-500" />
-                </button>
-              </td>
-              <td>
-                <button className="p-1 rounded hover:bg-gray-200">
-                  <MoreVertical className="h-4 w-4 text-gray-500" />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table
+      columns={columns}
+      data={invoices}
+      renderRow={(info) => (
+        <tr key={info.id} className="hover:bg-gray-50">
+          <Td>{info.id}</Td>
+          <Td>{info.type}</Td>
+          <Td>{info.name}</Td>
+          <Td>{info.vat}</Td>
+          <Td>{info.date}</Td>
+          <Td>
+            <span
+              className={cn(
+                "inline-block rounded-full w-1 h-1 p-1 mr-2",
+                info.status ? "bg-green-500" : "bg-yellow-500"
+              )}
+            />
+            {info.status === 0 ? "보류중" : "결제 완료"}
+          </Td>
+          <Td>{info.amount.toLocaleString("ko-KR")}원</Td>
+          <Td className="w-0 space-x-2">
+            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
+              <Icon type="download" className="h-5 w-5" />
+            </button>
+            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
+              <Icon type="more-vertical" className="h-5 w-5" />
+            </button>
+          </Td>
+        </tr>
+      )}
+    />
   );
 };
+
+export default InvoiceList;

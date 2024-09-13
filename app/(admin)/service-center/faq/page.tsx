@@ -1,12 +1,14 @@
 import { Pagination } from "@/app/_components/Pagination";
-import { NoticeList } from "../notice-list";
+import { FaqList } from "./faq-list";
 
 export default function FaqPage() {
   return (
-    <main className="flex-1 overflow-y-auto bg-white rounded-lg p-6">
+    <div className="flex flex-col h-full">
       <h1 className="text-xl font-semibold mb-4">FAQ</h1>
-      <NoticeList />
+      <div className="block flex-1 overflow-auto">
+        <FaqList />
+      </div>
       <Pagination />
-    </main>
+    </div>
   );
 }
