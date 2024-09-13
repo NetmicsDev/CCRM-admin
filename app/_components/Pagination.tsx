@@ -1,30 +1,99 @@
+"use client";
 import React from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import Icon from "./Icon";
+import cn from "../_utils/cn";
 
-export const Pagination = () => (
-  <div className="flex justify-between items-center pt-4">
-    <span className="text-sm text-gray-500">16개 항목 중 1-8개 항목 표시</span>
-    <div className="flex space-x-2">
-      <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">
-        &lt;
-      </button>
-      <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">
-        1
-      </button>
-      <button className="px-3 py-1 border rounded text-sm bg-blue-50 text-blue-600">
-        2
-      </button>
-      <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">
-        3
-      </button>
-      <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">
-        4
-      </button>
-      <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">
-        5
-      </button>
-      <button className="px-3 py-1 border rounded text-sm hover:bg-gray-50">
-        &gt;
-      </button>
+interface PaginationProps {
+  totalCount?: number;
+  itemsPerPage?: number;
+}
+
+export const Pagination: React.FC<PaginationProps> = ({
+  totalCount = 100,
+  itemsPerPage = 10,
+}) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxPages = 10;
+    let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+    let endPage = Math.min(totalPages, startPage + maxPages - 1);
+
+    if (endPage - startPage + 1 < maxPages) {
+      startPage = Math.max(1, endPage - maxPages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    return pageNumbers;
+  };
+
+  const createPageUrl = (page: number) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    return `${pathname}?${params.toString()}`;
+  };
+
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, totalCount);
+
+  return (
+    <div className="flex items-center pt-4 gap-2" aria-label="Pagination">
+      <div className="hidden sm:block">
+        <p className="text-sm text-gray-700">
+          {totalCount}개 항목 중{" "}
+          <span className="font-medium">{startItem}</span> -{" "}
+          <span className="font-medium">{endItem}</span>개 항목 표시
+        </p>
+      </div>
+      <div className="flex flex-1 justify-between sm:justify-end">
+        <Link
+          href={createPageUrl(currentPage - 1)}
+          className={cn(
+            "rounded-full p-2 hover:bg-gray-100",
+            currentPage <= 1
+              ? "pointer-events-none text-gray-400"
+              : "text-gray-700"
+          )}
+        >
+          <Icon type="chevron-left" className="h-6 w-6" />
+        </Link>
+        <div className="hidden md:flex space-x-1">
+          {getPageNumbers().map((number) => (
+            <Link
+              key={number}
+              href={createPageUrl(number)}
+              className={cn(
+                "w-10 h-10 flex justify-center items-center text-sm font-medium rounded-full",
+                number === currentPage
+                  ? "bg-gray-500 text-white pointer-events-none"
+                  : "text-gray-500 hover:bg-gray-100"
+              )}
+            >
+              {number}
+            </Link>
+          ))}
+        </div>
+        <Link
+          href={createPageUrl(currentPage + 1)}
+          className={cn(
+            "rounded-full p-2 hover:bg-gray-100",
+            currentPage >= totalPages
+              ? "pointer-events-none text-gray-400"
+              : "text-gray-700"
+          )}
+        >
+          <Icon type="chevron-right" className="w-6 h-6 " />
+        </Link>
+      </div>
     </div>
-  </div>
-);
+  );
+};
