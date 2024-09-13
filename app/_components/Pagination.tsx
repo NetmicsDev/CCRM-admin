@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Icon from "./Icon";
@@ -9,8 +9,25 @@ interface PaginationProps {
   totalCount?: number;
   itemsPerPage?: number;
 }
-
-export const Pagination: React.FC<PaginationProps> = ({
+export function Pagination({
+  totalCount = 100,
+  itemsPerPage = 10,
+}: PaginationProps) {
+  return (
+    <div
+      className="flex w-full justify-between items-center pt-4 gap-2"
+      aria-label="Pagination"
+    >
+      <Suspense fallback={<div></div>}>
+        <PaginationContent
+          totalCount={totalCount}
+          itemsPerPage={itemsPerPage}
+        />
+      </Suspense>
+    </div>
+  );
+}
+export const PaginationContent: React.FC<PaginationProps> = ({
   totalCount = 100,
   itemsPerPage = 10,
 }) => {
@@ -46,7 +63,7 @@ export const Pagination: React.FC<PaginationProps> = ({
   const endItem = Math.min(currentPage * itemsPerPage, totalCount);
 
   return (
-    <div className="flex items-center pt-4 gap-2" aria-label="Pagination">
+    <>
       <div className="hidden sm:block">
         <p className="text-sm text-gray-700">
           {totalCount}개 항목 중{" "}
@@ -94,6 +111,6 @@ export const Pagination: React.FC<PaginationProps> = ({
           <Icon type="chevron-right" className="w-6 h-6 " />
         </Link>
       </div>
-    </div>
+    </>
   );
 };

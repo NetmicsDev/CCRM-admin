@@ -17,7 +17,7 @@ const courses = [
     position: [1],
   },
   {
-    id: "EKG464SJFN17",
+    id: "EKG464SJFN18",
     title: "부동산 공매 투자로 10억 만들기",
     instructor: "정은우",
     category: "제테크/투자",
@@ -26,7 +26,7 @@ const courses = [
     position: [2],
   },
   {
-    id: "EKG464SJFN17",
+    id: "EKG464SJFN19",
     title: "부동산 공매 투자로 10억 만들기",
     instructor: "정은우",
     category: "제테크/투자",
