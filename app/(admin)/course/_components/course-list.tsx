@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Icon from "@/app/_components/Icon";
 import { Table, Td } from "@/app/_components/Table";
 import cn from "@/app/_utils/cn";
+import useModalStore from "@/app/_utils/store/modal";
 
 // Mock data for courses
 const courses = [
@@ -37,6 +38,8 @@ const courses = [
 ];
 
 export const CourseList: React.FC = () => {
+  const { openAlert, openConfirm } = useModalStore();
+
   const columns = [
     { label: "NO.", key: "id" },
     { label: "내용", key: "content" },
@@ -78,10 +81,26 @@ export const CourseList: React.FC = () => {
           </Td>
           <Td>{course.position.join(", ")}</Td>
           <Td className="w-0 space-x-2">
-            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
+            <button
+              className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
+              onClick={() =>
+                openAlert({ title: "Test Alert", description: "blah blah" })
+              }
+            >
               <Icon type="square-pen" className="w-5 h-5" />
             </button>
-            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
+            <button
+              className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
+              onClick={() =>
+                openConfirm({
+                  title: "Test Confirm",
+                  description: "blah blah",
+                  onConfirm: () => {
+                    alert("확인!");
+                  },
+                })
+              }
+            >
               <Icon type="more-vertical" className="h-5 w-5" />
             </button>
           </Td>

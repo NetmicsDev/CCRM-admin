@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import ModalManager from "./_components/Modal";
 
 export const metadata: Metadata = {
   title: "CCRM 관리자",
@@ -25,6 +26,7 @@ export default function RootLayout({
         className={`${pretendard.className} flex h-screen font-light bg-slate-100`}
       >
         {children}
+        <ModalManager />
       </body>
     </html>
   );
