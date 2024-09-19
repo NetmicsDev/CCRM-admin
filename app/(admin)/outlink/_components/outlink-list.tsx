@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Icon from "@/app/_components/Icon";
 import { Table, Td } from "@/app/_components/Table";
 import cn from "@/app/_utils/cn";
+import OutlinkItem from "./outlink-item";
 
 // Mock data for outlinks
 const outlinks = [
@@ -11,12 +12,18 @@ const outlinks = [
     id: "EKG464SJFN17",
     company: "KB손해보험",
     category: "청구/손해보험",
+    public: true,
+    logo: "https://google.com",
+    url: "https://google.com",
     updateDate: "2024년 9월 25일",
   },
   {
     id: "EKG464SJFN17",
     company: "KB손해보험",
     category: "약관/생명보험",
+    public: true,
+    logo: "https://google.com",
+    url: "https://google.com",
     updateDate: "2024년 9월 25일",
   },
 ];
@@ -35,28 +42,7 @@ export const OutlinkList: React.FC = () => {
       columns={columns}
       data={outlinks}
       renderRow={(outlink) => (
-        <tr key={outlink.id} className="hover:bg-gray-50">
-          <Td>{outlink.id}</Td>
-          <Td>
-            <div className="flex items-center gap-1">
-              <Icon
-                type="user-circle"
-                className="inline-block w-5 h-5 stroke-gray-700"
-              />
-              <span>{outlink.company}</span>
-            </div>
-          </Td>
-          <Td>{outlink.category}</Td>
-          <Td>{outlink.updateDate}</Td>
-          <Td className="w-0 space-x-2">
-            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-              <Icon type="square-pen" className="w-5 h-5" />
-            </button>
-            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-              <Icon type="more-vertical" className="h-5 w-5" />
-            </button>
-          </Td>
-        </tr>
+        <OutlinkItem key={outlink.id} outlink={outlink} />
       )}
     />
   );

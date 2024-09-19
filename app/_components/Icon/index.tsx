@@ -25,6 +25,7 @@ import {
   Trash,
   X,
   Plus,
+  FileImage,
 } from "lucide-react";
 
 const iconMap = {
@@ -51,6 +52,7 @@ const iconMap = {
   trash: Trash,
   close: X,
   plus: Plus,
+  "file-image": FileImage,
 };
 export type IconType = keyof typeof iconMap;
 
