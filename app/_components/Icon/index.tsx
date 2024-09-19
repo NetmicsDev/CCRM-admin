@@ -24,6 +24,7 @@ import {
   Printer,
   Trash,
   X,
+  Plus,
 } from "lucide-react";
 
 const iconMap = {
@@ -49,6 +50,7 @@ const iconMap = {
   printer: Printer,
   trash: Trash,
   close: X,
+  plus: Plus,
 };
 export type IconType = keyof typeof iconMap;
 

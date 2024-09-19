@@ -18,6 +18,8 @@ const routeNameMap: { [key: string]: string } = {
   invoice: "인보이스",
   history: "인보이스 내역",
   info: "결제 정보",
+  new: "추가",
+  edit: "수정",
 };
 
 export const Breadcrumb: React.FC = () => {
