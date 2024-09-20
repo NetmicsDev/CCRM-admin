@@ -5,24 +5,20 @@ import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Notice from "@/app/_types/notice";
+import Faq from "@/app/_types/faq";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function NoticeForm({
-  notice,
-  title,
-}: {
-  notice?: Notice;
-  title: string;
-}) {
-  const [formData, setFormData] = useState<Notice>(
-    notice ?? {
+export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
+  const [formData, setFormData] = useState<Faq>(
+    faq ?? {
       id: "",
       title: "",
       content: "",
-      category: "청구/손해보험",
+      category: "결제",
       public: true,
+      file: "",
+      url: "",
       updateDate: new Date().toISOString().split("T")[0],
     }
   );
@@ -59,7 +55,7 @@ export default function NoticeForm({
           placeholder="내용을 작성해주세요"
           value={formData.content}
           onChange={handleChange}
-          className="h-60"
+          className="h-24"
           required
         />
 
@@ -69,9 +65,12 @@ export default function NoticeForm({
             label="카테고리"
             defaultValue={formData.category}
             options={[
-              { text: "공지사항", value: "notice" },
-              { text: "메인상단", value: "main" },
-              { text: "팝업", value: "popup" },
+              { text: "결제 관련", value: "결제" },
+              { text: "회원 관련", value: "회원" },
+              { text: "오류 관련", value: "오류" },
+              { text: "프로그램 관련", value: "프로그램" },
+              { text: "제휴 관련", value: "제휴" },
+              { text: "기타", value: "기타" },
             ]}
           />
           <SelectField
@@ -85,25 +84,25 @@ export default function NoticeForm({
           />
         </div>
 
-        {/* <FileField
+        <FileField
           name="logo-file"
           label="파일 업로드"
           accept="image/*"
-          placeholder={formData.logo ? formData.logo : "파일을 업로드해주세요"}
+          placeholder={formData.file ? formData.file : "파일을 업로드해주세요"}
           icon="file-image"
-        /> */}
+        />
 
-        {/* <TextField
+        <TextField
           name="url"
           label="URL"
           placeholder="URL를 입력해주세요"
           defaultValue={formData.url}
           required
-        /> */}
+        />
       </div>
       <div className="flex justify-between ">
         <Link
-          href={"/service-center/notice"}
+          href={"/service-center/faq"}
           className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 font-medium"
         >
           취소하기

@@ -25,7 +25,7 @@ const FileUpload = ({
   };
 
   return (
-    <div className="flex flex-col flex-1 gap-2">
+    <div className="flex flex-col gap-2">
       <span className="block text-sm font-medium text-gray-700">{label}</span>
       <div className="w-full flex items-center border border-gray-300 shadow-sm rounded-md px-3 py-2.5">
         <label
