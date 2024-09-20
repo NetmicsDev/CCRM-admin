@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend,
@@ -17,23 +18,25 @@ import Icon from "@/app/_components/Icon";
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  BarElement,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
   Legend
 );
 
-const ActiveUsers: React.FC = () => {
+const DailyVisitors: React.FC = () => {
   // 차트 데이터
   const data = {
-    labels: [1, 2, 3, 4, 5, 6, 7, 8], // 표시되지 않음
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], // X축 레이블
     datasets: [
       {
-        label: "활성 유저 수",
-        data: [2000, 3500, 1000, 3123, 1845, 3234, 2567, 1500],
-        backgroundColor: "#0E5FD9",
-        borderRadius: 4, // 막대기 둥글게
-        borderSkipped: false, // 막대기 둥글게 표현할 때 사용
+        label: "Active Users",
+        data: [200, 400, 300, 500, 700, 600, 300], // Y축 데이터
+        fill: false, // 라인 차트 아래를 채움
+        borderColor: "#0E5FD9", // 라인색
+        tension: 0.4, // 곡선의 부드러움 정도
+        pointBackgroundColor: "#0E5FD9", // 포인트 배경색
       },
     ],
   };
@@ -45,6 +48,9 @@ const ActiveUsers: React.FC = () => {
       legend: {
         display: false, // 범례 숨기기
       },
+      tooltip: {
+        enabled: true, // 툴팁 숨기기
+      },
     },
     scales: {
       x: {
@@ -55,28 +61,27 @@ const ActiveUsers: React.FC = () => {
         beginAtZero: true,
       },
     },
-    maxBarThickness: 8,
   };
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-md">
       <div className="flex justify-between items-center">
         <div>
-          <p className="text-xs text-gray-500">월간 활성 유저 수</p>
+          <p className="text-xs text-gray-500">일간 방문자 수</p>
           <h2 className="text-2xl font-semibold mt-1">
             {data.datasets[0].data.reduce((a, b) => a + b, 0).toLocaleString()}
           </h2>
         </div>
-        <div className="text-green-500 flex items-center text-sm">
-          <Icon type="move-up" className="w-4 h-4" />
-          <span className="ml-1">6.7% 증가</span>
+        <div className="text-red-500 flex items-center text-sm">
+          <Icon type="move-up" className="w-4 h-4 rotate-180" />
+          <span className="ml-1">13.5% 하락</span>
         </div>
       </div>
 
       {/* 차트 영역 */}
-      <Bar data={data} options={options} className="pt-6" />
+      <Line data={data} options={options} className="pt-6" />
     </div>
   );
 };
 
-export default ActiveUsers;
+export default DailyVisitors;
