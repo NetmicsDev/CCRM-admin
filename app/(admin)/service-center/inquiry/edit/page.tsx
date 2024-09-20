@@ -6,6 +6,14 @@ import Inquiry from "@/app/_types/inquiry";
 import { Suspense } from "react";
 
 export default function InquiryEditPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <InquiryEditInner />
+    </Suspense>
+  );
+}
+
+const InquiryEditInner = () => {
   const searchParams = useSearchParams();
   if (!searchParams.has("data")) {
     redirect("/service-center/inquiry");
@@ -17,9 +25,5 @@ export default function InquiryEditPage() {
     redirect("/service-center/inquiry");
   }
 
-  return (
-    <Suspense fallback={<div></div>}>
-      <InquiryForm title="1:1 문의 답변" inquiry={inquiry as Inquiry} />
-    </Suspense>
-  );
-}
+  return <InquiryForm title="1:1 문의 답변" inquiry={inquiry as Inquiry} />;
+};

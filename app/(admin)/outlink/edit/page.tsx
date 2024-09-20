@@ -6,6 +6,14 @@ import Outlink from "@/app/_types/outlink";
 import { Suspense } from "react";
 
 export default function OutlinkEditPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <OutlinkEditInner />
+    </Suspense>
+  );
+}
+
+const OutlinkEditInner = () => {
   const searchParams = useSearchParams();
   if (!searchParams.has("data")) {
     redirect("/outlink");
@@ -17,9 +25,5 @@ export default function OutlinkEditPage() {
     redirect("/outlink");
   }
 
-  return (
-    <Suspense fallback={<div></div>}>
-      <OutlinkForm title="강의 수정하기" outlink={outlink as Outlink} />;
-    </Suspense>
-  );
-}
+  return <OutlinkForm title="강의 수정하기" outlink={outlink as Outlink} />;
+};

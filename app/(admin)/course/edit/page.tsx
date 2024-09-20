@@ -6,6 +6,14 @@ import CourseForm from "../_components/course-form";
 import { Suspense } from "react";
 
 export default function CourseEditPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <CourseEditInner />
+    </Suspense>
+  );
+}
+
+const CourseEditInner = () => {
   const searchParams = useSearchParams();
   if (!searchParams.has("data")) {
     redirect("/course");
@@ -17,9 +25,5 @@ export default function CourseEditPage() {
     redirect("/course");
   }
 
-  return (
-    <Suspense fallback={<div></div>}>
-      <CourseForm title="강의 수정하기" course={course as Course} />;
-    </Suspense>
-  );
-}
+  return <CourseForm title="강의 수정하기" course={course as Course} />;
+};

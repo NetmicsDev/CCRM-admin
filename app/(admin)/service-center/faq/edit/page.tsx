@@ -6,6 +6,14 @@ import Faq from "@/app/_types/faq";
 import { Suspense } from "react";
 
 export default function FaqEditPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <FaqEditInner />
+    </Suspense>
+  );
+}
+
+const FaqEditInner = () => {
   const searchParams = useSearchParams();
   if (!searchParams.has("data")) {
     redirect("/service-center/faq");
@@ -17,9 +25,5 @@ export default function FaqEditPage() {
     redirect("/service-center/faq");
   }
 
-  return (
-    <Suspense fallback={<div></div>}>
-      <FaqForm title="FAQ 수정하기" faq={faq as Faq} />
-    </Suspense>
-  );
-}
+  return <FaqForm title="FAQ 수정하기" faq={faq as Faq} />;
+};
