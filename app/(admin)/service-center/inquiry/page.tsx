@@ -1,5 +1,5 @@
 import { Pagination } from "@/app/_components/Pagination";
-import InquiryList from "./inquiry-list";
+import InquiryList from "./_components/inquiry-list";
 
 export default function InquiryPage() {
   return (
