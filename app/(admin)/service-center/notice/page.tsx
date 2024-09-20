@@ -1,5 +1,5 @@
 import { Pagination } from "@/app/_components/Pagination";
-import { NoticeList } from "./notice-list";
+import { NoticeList } from "./_components/notice-list";
 
 export default function NoticePage() {
   return (

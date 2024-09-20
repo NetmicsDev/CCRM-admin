@@ -3,8 +3,9 @@
 import { redirect, useSearchParams } from "next/navigation";
 import OutlinkForm from "../_components/outlink-form";
 import Outlink from "@/app/_types/outlink";
+import { Suspense } from "react";
 
-export default function CourseEditPage() {
+export default function OutlinkEditPage() {
   const searchParams = useSearchParams();
   if (!searchParams.has("data")) {
     redirect("/outlink");
@@ -16,5 +17,9 @@ export default function CourseEditPage() {
     redirect("/outlink");
   }
 
-  return <OutlinkForm title="강의 수정하기" outlink={outlink as Outlink} />;
+  return (
+    <Suspense fallback={<div></div>}>
+      <OutlinkForm title="강의 수정하기" outlink={outlink as Outlink} />;
+    </Suspense>
+  );
 }

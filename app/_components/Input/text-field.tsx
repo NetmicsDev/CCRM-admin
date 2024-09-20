@@ -13,7 +13,7 @@ export default function TextField({
   ...props
 }: TextFieldProps) {
   return (
-    <div className="flex flex-col flex-1 gap-2">
+    <div className="flex flex-col gap-2">
       <label htmlFor={name} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
