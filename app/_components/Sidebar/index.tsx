@@ -1,10 +1,11 @@
 import { NavItem } from "./NavItem";
 import Image from "next/image";
 import NavGroup from "./NavGroup";
+import { signOut } from "@/app/_services/auth";
 
 export default function Sidebar() {
   return (
-    <aside className="print:hidden w-64 bg-white border-r h-screen p-4">
+    <aside className="print:hidden flex flex-col w-64 bg-white border-r h-screen p-4">
       <div className="flex items-center mb-4 p-2">
         <Image
           src="/images/logo.svg"
@@ -14,7 +15,7 @@ export default function Sidebar() {
           style={{ height: "auto" }}
         />
       </div>
-      <nav>
+      <nav className="flex-1">
         <ul className="space-y-2">
           <li>
             <NavItem
@@ -81,6 +82,14 @@ export default function Sidebar() {
           </li>
         </ul>
       </nav>
+      <form action={signOut}>
+        <button
+          type="submit"
+          className="rounded px-4 py-2 text-red-500 hover:bg-red-100"
+        >
+          로그아웃
+        </button>
+      </form>
     </aside>
   );
 }
