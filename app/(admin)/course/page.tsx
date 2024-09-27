@@ -15,10 +15,7 @@ export default function CoursePage() {
           <Icon type="plus" className="w-4 h-4 mr-1" /> 강의 추가하기
         </Link>
       </div>
-      <div className="block flex-1 overflow-auto">
-        <CourseList />
-      </div>
-      <Pagination />
+      <CourseList />
     </div>
   );
 }

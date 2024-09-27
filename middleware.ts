@@ -1,13 +1,15 @@
-import { cookies } from "next/headers";
 import { NextResponse, type NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const url = request.nextUrl.pathname;
+  if (url.startsWith("/api")) {
+    return NextResponse.next();
+  }
 
   // 요청에서 받은 쿠키로 JWT 토큰 읽기
   const token = request.cookies.get("token")?.value;
 
-  console.log("Middleware", url, token);
+  // console.log("Middleware", url, token);
 
   // 로그인 상태에서 /login 경로로 접근하면 홈으로 리디렉션
   if (token && url === "/login") {

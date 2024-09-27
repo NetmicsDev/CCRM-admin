@@ -16,10 +16,7 @@ export default function NoticePage() {
           공지사항 추가하기
         </Link>
       </div>
-      <div className="block flex-1 overflow-auto">
-        <NoticeList />
-      </div>
-      <Pagination />
+      <NoticeList />
     </div>
   );
 }

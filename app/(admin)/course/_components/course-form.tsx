@@ -2,7 +2,7 @@
 
 import { TextField } from "@/app/_components/Input";
 import SelectField from "@/app/_components/Input/select-field";
-import Course from "@/app/_types/course";
+import CourseModel from "@/app/_models/course";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -10,30 +10,12 @@ export default function CourseForm({
   course,
   title,
 }: {
-  course?: Course;
+  course?: CourseModel;
   title: string;
 }) {
-  const [formData, setFormData] = useState<Course>(
-    course ?? {
-      id: "",
-      title: "",
-      instructor: "",
-      category: "재테크/투자",
-      public: false,
-      updateDate: new Date().toISOString().split("T")[0],
-      url: "",
-      position: [],
-    }
+  const [formData, setFormData] = useState<CourseModel>(
+    course ?? CourseModel.empty()
   );
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   return (
     <form className="flex flex-col h-full">
@@ -55,7 +37,7 @@ export default function CourseForm({
             name="instructor"
             label="강사명"
             placeholder="강사명을 입력해주세요"
-            value={formData.instructor}
+            value={formData.lecturer}
             required
           />
           <SelectField
@@ -75,14 +57,14 @@ export default function CourseForm({
             label="업로드 날짜"
             type="date"
             defaultValue={
-              new Date(formData.updateDate).toISOString().split("T")[0]
+              new Date(formData.updatedAt).toISOString().split("T")[0]
             }
             required
           />
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.public ? 1 : 0}
+            defaultValue={formData.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },
@@ -102,7 +84,7 @@ export default function CourseForm({
           name="position"
           label="레이아웃 위치 설정"
           placeholder="숫자(,)로 작성해주세요"
-          defaultValue={formData.position.join(",")}
+          defaultValue={formData.layoutOrder}
         />
       </div>
       <div className="flex justify-between ">

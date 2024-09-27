@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { TextField } from "../_components/Input";
 import Icon from "../_components/Icon";
-import { signIn } from "../_services/auth";
 import { flushSync } from "react-dom";
 
 export default function LoginForm() {
@@ -17,21 +16,25 @@ export default function LoginForm() {
   }, [loading, error]);
 
   const handleSubmit = async (formData: FormData) => {
-    const email = formData.get("username") as string;
+    const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
     flushSync(() => setLoading(true));
-    const response = await signIn(email, password);
+    const response = await fetch("/api/sign-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await response.json();
     setLoading(false);
 
-    if (response && response.error) {
-      setError(response.error.message ?? "");
-      return;
+    if (response.ok) {
+      window.location.href = "/dashboard";
     }
 
-    if (response.token) {
-      window.location.href = "/";
-    }
+    setError(data.error?.message ?? "Unknown Error");
   };
 
   return (

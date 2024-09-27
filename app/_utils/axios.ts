@@ -1,6 +1,8 @@
 "use server";
 
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 // Axios 인스턴스 생성
@@ -27,60 +29,36 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// 응답 인터셉터: 에러 처리 (필요한 경우)
-axiosInstance.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    // 인증 실패 처리
-    if (
-      error.response?.status === 401 &&
-      error.config.params?.from !== "login"
-    ) {
-      console.error("인증 오류: 로그인이 필요합니다.");
-      cookies().delete("token");
-      // revalidatePath 는 server에서만 가능
-      // revalidatePath("/");
-
-      // NEXT_REDIRECT_ERROR 발생
-      // redirect는 try-catch문 말고 finally안에서 동작해야한다
-      // 컴포넌트 내부에 선언하는 것도 가능하지만 이렇게 내부동작 중에 호출할 수는 없는듯.
-      // redirect("/sign-in");
-      return Promise.reject({
-        type: "unauthorized",
-        message: "401 ERROR - Move to Sign-in Page",
-      });
-    }
-    return Promise.reject(error);
-  }
-);
-
 // 공통 처리 함수: 요청을 보낸 후 성공 및 실패 처리
-export const handleRequest = async (
-  promise: Promise<AxiosResponse>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<{ data?: any; error?: { type: string; message?: string } }> => {
-  let data, error;
+// token이 있어야하는 api들이 쓴다고 가정.
+export const apiRequest = async <T>(
+  url: string,
+  config?: AxiosRequestConfig
+): Promise<T> => {
+  let response;
+  let authenticated = true;
   try {
-    const response = await promise;
-    data = response.data; // 성공 시 데이터 반환
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (_error: any) {
-    if (axios.isAxiosError(_error)) {
-      error = {
-        type: "axios",
-        message: _error.response?.data?.message,
-      };
-    } else if (_error.type === "unauthorized") {
-      error = _error;
-    } else {
-      error = {
-        type: "unknown",
-        message: _error instanceof Error ? _error.message : "unknown error",
-      };
-    }
-  }
+    response = await axiosInstance(url, config);
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // Axios 에러 처리
+      console.error("API Error:", error.response?.data || error.message);
 
-  return { data, error };
+      if (error.response?.status === 401) {
+        authenticated = true;
+      }
+
+      throw error;
+    }
+    // 기타 에러 처리
+    throw new Error("알 수 없는 오류가 발생했습니다.");
+  } finally {
+    if (!authenticated) {
+      revalidatePath("/login");
+      redirect("/login");
+    }
+    return (response?.data ?? {}) as T;
+  }
 };
 
 export default axiosInstance;

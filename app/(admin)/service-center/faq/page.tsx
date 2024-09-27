@@ -1,4 +1,3 @@
-import { Pagination } from "@/app/_components/Pagination";
 import { FaqList } from "./_components/faq-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
@@ -16,10 +15,7 @@ export default function FaqPage() {
           FAQ 추가하기
         </Link>
       </div>
-      <div className="block flex-1 overflow-auto">
-        <FaqList />
-      </div>
-      <Pagination />
+      <FaqList />
     </div>
   );
 }

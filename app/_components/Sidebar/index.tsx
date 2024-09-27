@@ -1,7 +1,6 @@
 import { NavItem } from "./NavItem";
 import Image from "next/image";
 import NavGroup from "./NavGroup";
-import { signOut } from "@/app/_services/auth";
 
 export default function Sidebar() {
   return (
@@ -82,7 +81,7 @@ export default function Sidebar() {
           </li>
         </ul>
       </nav>
-      <form action={signOut}>
+      <form action={"/api/sign-out"}>
         <button
           type="submit"
           className="rounded px-4 py-2 text-red-500 hover:bg-red-100"
