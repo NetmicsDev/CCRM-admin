@@ -4,7 +4,7 @@ import CourseModel, { CourseDTO } from "../_models/course";
 import PageList from "../_models/page-list";
 import { apiRequest } from "../_utils/axios";
 
-export default async function getCoursesDTO(
+export default async function getCourses(
   page: number,
   limit: number = 10
 ): Promise<PageList<CourseModel>> {
@@ -24,9 +24,8 @@ export default async function getCoursesDTO(
     CourseModel.fromJson(course)
   );
 
-  // PageList<UserModel> 형식으로 반환
   return {
     ...response,
-    data: courses, // UserModel 배열로 교체
+    data: courses,
   };
 }
