@@ -18,6 +18,9 @@ const routeNameMap: { [key: string]: string } = {
   invoice: "인보이스",
   history: "인보이스 내역",
   info: "결제 정보",
+  insurance: "보험 청구",
+  term: "보험 약관",
+  disease: "질병 코드",
   new: "추가",
   edit: "수정",
 };

@@ -50,11 +50,20 @@ export function Pagination({
       <div className="hidden sm:block">
         <p className="text-sm text-gray-700">
           {totalCount}개 항목 중{" "}
-          <span className="font-medium">{startItem}</span> -{" "}
+          {totalCount !== 0 && (
+            <>
+              <span className="font-medium">{startItem}</span> -{" "}
+            </>
+          )}
           <span className="font-medium">{endItem}</span>개 항목 표시
         </p>
       </div>
-      <div className="flex flex-1 justify-between sm:justify-end">
+      <div
+        className={cn(
+          "flex flex-1 justify-between sm:justify-end",
+          totalCount === 0 && "hidden"
+        )}
+      >
         <Link
           href={createPageUrl(currentPage - 1)}
           className={cn(

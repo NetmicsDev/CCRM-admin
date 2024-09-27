@@ -51,10 +51,23 @@ export default function Sidebar() {
             />
           </li>
           <li>
-            <NavItem
-              href="/outlink"
+            <NavGroup
               title="청구/약관 링크 관리"
               icon="file-symlink"
+              items={[
+                {
+                  href: "/outlink/insurance",
+                  title: "보험 청구",
+                },
+                {
+                  href: "/outlink/term",
+                  title: "보험 약관",
+                },
+                {
+                  href: "/outlink/disease",
+                  title: "질병 코드",
+                },
+              ]}
             />
           </li>
         </ul>
