@@ -1,50 +1,50 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Icon from "@/app/_components/Icon";
 import { Table, Td } from "@/app/_components/Table";
 import NoticeItem from "./notice-item";
-
-// Mock data for notices
-const notices = [
-  {
-    id: "EKG464SJFN17",
-    title: "공지사항 입니다.",
-    content: "공지사항 내용입니다!",
-    category: "main",
-    updateDate: "2024년 9월 25일",
-  },
-  {
-    id: "EKG464SJFN18",
-    title: "공지사항 입니다.",
-    content: "공지사항 내용입니다!",
-    category: "notice",
-    updateDate: "2024년 9월 25일",
-  },
-  {
-    id: "EKG464SJFN19",
-    title: "공지사항 입니다.",
-    content: "공지사항 내용입니다!",
-    category: "popup",
-    updateDate: "2024년 9월 25일",
-  },
-];
+import { useSearchParams } from "next/navigation";
+import PageList from "@/app/_models/page-list";
+import getNotices from "@/app/_services/notice";
+import { Pagination } from "@/app/_components/Pagination";
+import NoticeModel from "@/app/_models/notice";
 
 export const NoticeList: React.FC = () => {
+  const searchParams = useSearchParams();
+  const pageNum: number = Number(searchParams.get("page") ?? "1");
+
+  const [notices, setNotices] = useState<PageList<NoticeModel>>();
+
+  useEffect(() => {
+    getNotices(pageNum)
+      .then((data) => {
+        setNotices(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [pageNum]);
+
   const columns = [
     { label: "NO.", key: "id" },
-    { label: "제목", key: "content" },
+    { label: "제목", key: "title" },
     { label: "카테고리", key: "category" },
-    { label: "업데이트 날짜", key: "updateDate" },
+    { label: "업데이트 날짜", key: "updatedAt" },
     { label: "", key: "actions" },
   ];
 
   return (
-    <Table
-      columns={columns}
-      data={notices}
-      renderRow={(notice) => <NoticeItem key={notice.id} notice={notice} />}
-    />
+    <>
+      <div className="block flex-1 overflow-auto">
+        <Table
+          columns={columns}
+          data={notices?.data ?? []}
+          renderRow={(notice) => <NoticeItem key={notice.id} notice={notice} />}
+        />
+      </div>
+      <Pagination totalCount={notices?.total ?? 0} currentPage={pageNum} />
+    </>
   );
 };
 

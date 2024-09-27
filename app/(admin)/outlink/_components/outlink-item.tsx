@@ -1,6 +1,6 @@
 import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
-import Outlink from "@/app/_types/outlink";
+import Outlink from "@/app/_models/outlink";
 import Link from "next/link";
 
 export default function OutlinkItem({ outlink }: { outlink: Outlink }) {

@@ -1,10 +1,11 @@
 import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
-import Course from "@/app/_types/course";
+import CourseModel from "@/app/_models/course";
 import cn from "@/app/_utils/cn";
+import { formatDateToKorean } from "@/app/_utils/format";
 import Link from "next/link";
 
-export default function CourseItem({ course }: { course: Course }) {
+export default function CourseItem({ course }: { course: CourseModel }) {
   return (
     <tr className="hover:bg-gray-50">
       <Td>{course.id}</Td>
@@ -15,27 +16,21 @@ export default function CourseItem({ course }: { course: Course }) {
             type="user-circle"
             className="inline-block w-5 h-5 stroke-gray-700"
           />
-          <span>{course.instructor}</span>
+          <span>{course.lecturer}</span>
         </div>
       </Td>
       <Td>{course.category}</Td>
-      <Td>
-        {new Date(course.updateDate).toLocaleDateString("ko-KR", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        })}
-      </Td>
+      <Td>{formatDateToKorean(course.updatedAt)}</Td>
       <Td>
         <span
           className={cn(
             "inline-block rounded-full w-1 h-1 p-1 mr-2",
-            course.public ? "bg-green-500" : "bg-red-500"
+            course.isPublished ? "bg-green-500" : "bg-red-500"
           )}
         />
-        {course.public ? "공개" : "비공개"}
+        {course.isPublished ? "공개" : "비공개"}
       </Td>
-      <Td>{course.position.join(", ")}</Td>
+      <Td>{course.layoutOrder}</Td>
       <Td className="w-0 space-x-2">
         <Link
           href={`/course/edit?data=${JSON.stringify(course)}`}

@@ -1,9 +1,10 @@
 import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
-import Notice from "@/app/_types/notice";
+import NoticeModel from "@/app/_models/notice";
+import { formatDateToKorean } from "@/app/_utils/format";
 import Link from "next/link";
 
-export default function NoticeItem({ notice }: { notice: Notice }) {
+export default function NoticeItem({ notice }: { notice: NoticeModel }) {
   return (
     <tr key={notice.id} className="hover:bg-gray-50">
       <Td>{notice.id}</Td>
@@ -15,10 +16,12 @@ export default function NoticeItem({ notice }: { notice: Notice }) {
           ? "메인 상단"
           : "팝업"}
       </Td>
-      <Td>{notice.updateDate}</Td>
+      <Td>{formatDateToKorean(notice.updatedAt)}</Td>
       <Td className="w-0 space-x-2">
         <Link
-          href={`/service-center/notice/edit?data=${JSON.stringify(notice)}`}
+          href={`/service-center/notice/edit?data=${JSON.stringify(
+            notice.toJson()
+          )}`}
           className="inline-flex p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
         >
           <Icon type="square-pen" className="w-5 h-5" />

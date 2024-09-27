@@ -2,8 +2,8 @@
 
 import { redirect, useSearchParams } from "next/navigation";
 import InquiryForm from "../_components/inquiry-form";
-import Inquiry from "@/app/_types/inquiry";
 import { Suspense } from "react";
+import InquiryModel from "@/app/_models/inquiry";
 
 export default function InquiryEditPage() {
   return (
@@ -19,11 +19,13 @@ const InquiryEditInner = () => {
     redirect("/service-center/inquiry");
     return;
   }
-  const inquiry = JSON.parse(searchParams.get("data") ?? "{}");
+  const inquiry = InquiryModel.fromJson(
+    JSON.parse(searchParams.get("data") ?? "{}")
+  );
 
   if (!inquiry.id) {
     redirect("/service-center/inquiry");
   }
 
-  return <InquiryForm title="1:1 문의 답변" inquiry={inquiry as Inquiry} />;
+  return <InquiryForm title="1:1 문의 답변" inquiry={inquiry} />;
 };

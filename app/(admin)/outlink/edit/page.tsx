@@ -2,7 +2,7 @@
 
 import { redirect, useSearchParams } from "next/navigation";
 import OutlinkForm from "../_components/outlink-form";
-import Outlink from "@/app/_types/outlink";
+import Outlink from "@/app/_models/outlink";
 import { Suspense } from "react";
 
 export default function OutlinkEditPage() {

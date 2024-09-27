@@ -5,38 +5,22 @@ import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Notice from "@/app/_types/notice";
+import NoticeModel from "@/app/_models/notice";
+import { formatDateToKorean } from "@/app/_utils/format";
 import Link from "next/link";
+import { format } from "path";
 import { useState } from "react";
 
 export default function NoticeForm({
   notice,
   title,
 }: {
-  notice?: Notice;
+  notice?: NoticeModel;
   title: string;
 }) {
-  const [formData, setFormData] = useState<Notice>(
-    notice ?? {
-      id: "",
-      title: "",
-      content: "",
-      category: "청구/손해보험",
-      public: true,
-      updateDate: new Date().toISOString().split("T")[0],
-    }
+  const [formData, setFormData] = useState<NoticeModel>(
+    notice ?? NoticeModel.empty()
   );
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   return (
     <form className="flex flex-col h-full">
@@ -58,7 +42,6 @@ export default function NoticeForm({
           label="내용"
           placeholder="내용을 작성해주세요"
           value={formData.content}
-          onChange={handleChange}
           className="h-60"
           required
         />
@@ -77,7 +60,7 @@ export default function NoticeForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.public ? 1 : 0}
+            defaultValue={formData.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },

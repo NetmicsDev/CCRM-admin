@@ -5,7 +5,7 @@ import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Inquiry from "@/app/_types/inquiry";
+import InquiryModel from "@/app/_models/inquiry";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -13,21 +13,12 @@ export default function InquiryForm({
   inquiry,
   title,
 }: {
-  inquiry: Inquiry;
+  inquiry: InquiryModel;
   title: string;
 }) {
-  const [formData, setFormData] = useState<Inquiry>(inquiry);
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const [formData, setFormData] = useState<InquiryModel>(
+    inquiry ?? InquiryModel.empty()
+  );
 
   return (
     <form className="flex flex-col h-full">
@@ -39,14 +30,14 @@ export default function InquiryForm({
         <TextField
           name="inquier"
           label="문의자"
-          value={formData.inquirer}
+          value={formData.inquiryAuthor?.name ?? ""}
           disabled
         />
         <TextField
           name="title"
           label="제목"
           placeholder="제목을 작성해주세요"
-          value={formData.title}
+          value={formData.inquiryTitle}
           disabled
         />
 
@@ -54,8 +45,7 @@ export default function InquiryForm({
           name="content"
           label="내용"
           placeholder="내용을 작성해주세요"
-          value={formData.content}
-          onChange={handleChange}
+          value={formData.inquiryContent}
           className="h-24"
           required
         />
@@ -76,7 +66,7 @@ export default function InquiryForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.public ? 1 : 0}
+            defaultValue={formData.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },
@@ -84,7 +74,7 @@ export default function InquiryForm({
           />
         </div>
 
-        <FileField
+        {/* <FileField
           name="logo-file"
           label="파일 업로드"
           accept="image/*"
@@ -98,7 +88,7 @@ export default function InquiryForm({
           placeholder="URL를 입력해주세요"
           defaultValue={formData.url}
           required
-        />
+        /> */}
       </div>
       <div className="flex justify-between ">
         <Link

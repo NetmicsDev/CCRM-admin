@@ -5,34 +5,18 @@ import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Faq from "@/app/_types/faq";
+import FaqModel from "@/app/_models/faq";
 import Link from "next/link";
 import { useState } from "react";
 
-export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
-  const [formData, setFormData] = useState<Faq>(
-    faq ?? {
-      id: "",
-      title: "",
-      content: "",
-      category: "결제",
-      public: true,
-      file: "",
-      url: "",
-      updateDate: new Date().toISOString().split("T")[0],
-    }
-  );
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+export default function FaqForm({
+  faq,
+  title,
+}: {
+  faq?: FaqModel;
+  title: string;
+}) {
+  const [formData, setFormData] = useState<FaqModel>(faq ?? FaqModel.empty());
 
   return (
     <form className="flex flex-col h-full">
@@ -54,7 +38,6 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           label="내용"
           placeholder="내용을 작성해주세요"
           value={formData.content}
-          onChange={handleChange}
           className="h-24"
           required
         />
@@ -76,7 +59,7 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.public ? 1 : 0}
+            defaultValue={formData.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },
@@ -84,19 +67,19 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           />
         </div>
 
-        <FileField
+        {/* <FileField
           name="logo-file"
           label="파일 업로드"
           accept="image/*"
-          placeholder={formData.file ? formData.file : "파일을 업로드해주세요"}
+          placeholder={formData.attachment ? formData.attachment : "파일을 업로드해주세요"}
           icon="file-image"
-        />
+        /> */}
 
         <TextField
           name="url"
           label="URL"
           placeholder="URL를 입력해주세요"
-          defaultValue={formData.url}
+          defaultValue={formData.attachment}
           required
         />
       </div>

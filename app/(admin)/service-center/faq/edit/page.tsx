@@ -2,8 +2,8 @@
 
 import { redirect, useSearchParams } from "next/navigation";
 import FaqForm from "../_components/faq-form";
-import Faq from "@/app/_types/faq";
 import { Suspense } from "react";
+import FaqModel from "@/app/_models/faq";
 
 export default function FaqEditPage() {
   return (
@@ -19,11 +19,11 @@ const FaqEditInner = () => {
     redirect("/service-center/faq");
     return;
   }
-  const faq = JSON.parse(searchParams.get("data") ?? "{}");
+  const faq = FaqModel.fromJson(JSON.parse(searchParams.get("data") ?? "{}"));
 
   if (!faq.id) {
     redirect("/service-center/faq");
   }
 
-  return <FaqForm title="FAQ 수정하기" faq={faq as Faq} />;
+  return <FaqForm title="FAQ 수정하기" faq={faq} />;
 };

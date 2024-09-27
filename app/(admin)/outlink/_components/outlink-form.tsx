@@ -4,7 +4,7 @@ import Icon from "@/app/_components/Icon";
 import { TextField } from "@/app/_components/Input";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Outlink from "@/app/_types/outlink";
+import Outlink from "@/app/_models/outlink";
 import Link from "next/link";
 import { useState } from "react";
 
