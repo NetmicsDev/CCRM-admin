@@ -1,6 +1,7 @@
 import { FaqList } from "./_components/faq-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
+import { Suspense } from "react";
 
 export default function FaqPage() {
   return (
@@ -15,7 +16,9 @@ export default function FaqPage() {
           FAQ 추가하기
         </Link>
       </div>
-      <FaqList />
+      <Suspense fallback={<></>}>
+        <FaqList />
+      </Suspense>
     </div>
   );
 }

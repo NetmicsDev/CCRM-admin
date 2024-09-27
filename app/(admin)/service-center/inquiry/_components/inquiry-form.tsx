@@ -35,7 +35,7 @@ export default function InquiryForm({
         />
         <TextField
           name="title"
-          label="제목"
+          label="문의 제목"
           placeholder="제목을 작성해주세요"
           value={formData.inquiryTitle}
           disabled
@@ -43,9 +43,26 @@ export default function InquiryForm({
 
         <TextAreaField
           name="content"
-          label="내용"
+          label="문의 내용"
           placeholder="내용을 작성해주세요"
           value={formData.inquiryContent}
+          className="h-40"
+          disabled
+        />
+
+        <TextField
+          name="title"
+          label="답변 제목"
+          placeholder="제목을 작성해주세요"
+          value={formData.answerTitle}
+          required
+        />
+
+        <TextAreaField
+          name="content"
+          label="답변 내용"
+          placeholder="내용을 작성해주세요"
+          value={formData.answerContent}
           className="h-24"
           required
         />
@@ -73,22 +90,6 @@ export default function InquiryForm({
             ]}
           />
         </div>
-
-        {/* <FileField
-          name="logo-file"
-          label="파일 업로드"
-          accept="image/*"
-          placeholder={formData.file ? formData.file : "파일을 업로드해주세요"}
-          icon="file-image"
-        />
-
-        <TextField
-          name="url"
-          label="URL"
-          placeholder="URL를 입력해주세요"
-          defaultValue={formData.url}
-          required
-        /> */}
       </div>
       <div className="flex justify-between ">
         <Link
