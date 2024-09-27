@@ -1,6 +1,7 @@
 import Link from "next/link";
 import DiseaseList from "./_components/disease-list";
 import Icon from "@/app/_components/Icon";
+import { Suspense } from "react";
 
 export default function DiseasePage() {
   return (
@@ -15,7 +16,9 @@ export default function DiseasePage() {
           질병 코드 추가하기
         </Link>
       </div>
-      <DiseaseList />
+      <Suspense fallback={<></>}>
+        <DiseaseList />
+      </Suspense>
     </div>
   );
 }

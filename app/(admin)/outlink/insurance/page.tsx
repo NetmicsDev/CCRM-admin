@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
 import InsuranceList from "./_components/insurance-list";
+import { Suspense } from "react";
 
 export default function FaqPage() {
   return (
@@ -15,7 +16,9 @@ export default function FaqPage() {
           보험 청구 추가하기
         </Link>
       </div>
-      <InsuranceList />
+      <Suspense fallback={<></>}>
+        <InsuranceList />
+      </Suspense>
     </div>
   );
 }

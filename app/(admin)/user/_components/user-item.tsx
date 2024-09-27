@@ -14,11 +14,13 @@ export default function UserItem({ user }: { user: UserModel }) {
       <Td>{formatDateToKorean(new Date(user.createdAt))}</Td>
       <Td>
         <span
-          className={cn("inline-block rounded-full w-1 h-1 p-1 mr-2", {
-            "bg-red-500": user.subscriptionStatus === "CANCELED",
-            "bg-green-500": user.subscriptionStatus === "",
-            "bg-yellow-500": user.subscriptionStatus === "FREE_TRIAL",
-          })}
+          className={cn(
+            "inline-block rounded-full bg-green-500 w-1 h-1 p-1 mr-2 ",
+            {
+              "bg-red-500": user.subscriptionStatus === "CANCELED",
+              "bg-yellow-500": user.subscriptionStatus === "FREE_TRIAL",
+            }
+          )}
         />
         {user.subscriptionStatus === "CANCELED"
           ? "구독 해지"

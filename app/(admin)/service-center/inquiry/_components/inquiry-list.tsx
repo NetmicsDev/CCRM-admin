@@ -30,6 +30,7 @@ export const InquiryList: React.FC = () => {
     { label: "NO.", key: "id" },
     { label: "문의 제목", key: "inquiryTitle" },
     { label: "카테고리", key: "category" },
+    { label: "상태", key: "status" },
     { label: "업데이트 날짜", key: "updatedAt" },
     { label: "", key: "actions" },
   ];

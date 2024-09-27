@@ -2,6 +2,7 @@ import { Pagination } from "@/app/_components/Pagination";
 import TermList from "./_components/term-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
+import { Suspense } from "react";
 
 export default function NoticePage() {
   return (
@@ -16,7 +17,9 @@ export default function NoticePage() {
           보험 약관 추가하기
         </Link>
       </div>
-      <TermList />
+      <Suspense fallback={<></>}>
+        <TermList />
+      </Suspense>
     </div>
   );
 }

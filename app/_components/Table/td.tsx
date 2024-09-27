@@ -7,5 +7,7 @@ export default function Td({
   className?: string;
   children?: React.ReactNode;
 }) {
-  return <td className={cn("p-3 whitespace-nowrap", className)}>{children}</td>;
+  return (
+    <td className={cn("px-2 py-3 whitespace-nowrap", className)}>{children}</td>
+  );
 }

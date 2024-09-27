@@ -14,7 +14,7 @@ export default function Sidebar() {
           style={{ height: "auto" }}
         />
       </div>
-      <nav className="flex-1">
+      <nav className="flex-1 overflow-y-scroll">
         <ul className="space-y-2">
           <li>
             <NavItem
