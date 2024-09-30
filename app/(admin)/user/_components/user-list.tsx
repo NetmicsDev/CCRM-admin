@@ -2,27 +2,36 @@
 
 import { Pagination } from "@/app/_components/Pagination";
 import { Table } from "@/app/_components/Table";
-import getUsers from "@/app/_services/user";
+import { getUsers } from "@/app/_services/user";
 import UserModel from "@/app/_models/user";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import UserItem from "./user-item";
 import PageList from "@/app/_models/page-list";
+import useModalStore from "@/app/_utils/store/modal";
 
 const UserListView = () => {
+  const { openAlert } = useModalStore();
   const searchParams = useSearchParams();
   const pageNum: number = Number(searchParams.get("page") ?? "1");
 
-  const [userList, setUserList] = useState<PageList<UserModel>>();
+  const [users, setUsers] = useState<PageList<UserModel>>();
 
   useEffect(() => {
-    getUsers(pageNum)
-      .then((res) => {
-        setUserList(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchUsers = async () => {
+      const { data, error } = await getUsers(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setUsers(data);
+    };
+    fetchUsers();
   }, [pageNum]);
 
   const columns = [
@@ -41,13 +50,13 @@ const UserListView = () => {
       <div className="block flex-1 overflow-y-scroll">
         <Table
           columns={columns}
-          data={userList?.data ?? []}
+          data={users?.data ?? []}
           renderRow={(user: UserModel) => (
             <UserItem key={user.id} user={user} />
           )}
         />
       </div>
-      <Pagination totalCount={userList?.total ?? 0} currentPage={pageNum} />
+      <Pagination totalCount={users?.total ?? 0} currentPage={pageNum} />
     </>
   );
 };

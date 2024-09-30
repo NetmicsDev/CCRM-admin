@@ -5,24 +5,33 @@ import { Table } from "@/app/_components/Table";
 import FaqItem from "./faq-item";
 import { useSearchParams } from "next/navigation";
 import PageList from "@/app/_models/page-list";
-import getFAQs from "@/app/_services/faq";
+import { getFaqs } from "@/app/_services/faq";
 import { Pagination } from "@/app/_components/Pagination";
 import FaqModel from "@/app/_models/faq";
+import useModalStore from "@/app/_utils/store/modal";
 
 export const FaqList: React.FC = () => {
+  const { openAlert } = useModalStore();
   const searchParams = useSearchParams();
   const pageNum: number = Number(searchParams.get("page") ?? "1");
 
   const [faqList, setFaqList] = useState<PageList<FaqModel>>();
 
   useEffect(() => {
-    getFAQs(pageNum)
-      .then((data) => {
-        setFaqList(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchFaqs = async () => {
+      const { data, error } = await getFaqs(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setFaqList(data);
+    };
+    fetchFaqs();
   }, [pageNum]);
 
   const columns = [

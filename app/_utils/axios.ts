@@ -1,6 +1,6 @@
 "use server";
 
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
@@ -34,31 +34,41 @@ axiosInstance.interceptors.request.use(
 export const apiRequest = async <T>(
   url: string,
   config?: AxiosRequestConfig
-): Promise<T> => {
+): Promise<SimpleResponse<T>> => {
   let response;
+  let error;
   let authenticated = true;
   try {
     response = await axiosInstance(url, config);
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
+  } catch (_error) {
+    if (axios.isAxiosError(_error)) {
       // Axios 에러 처리
-      console.error("API Error:", error.response?.data || error.message);
+      console.error("API Error:", _error.response?.data || _error.message);
 
-      if (error.response?.status === 401) {
+      if (_error.response?.status === 401) {
         authenticated = true;
       }
 
-      throw error;
+      error = _error;
+    } else {
+      error = new AxiosError("Unknown Error");
     }
-    // 기타 에러 처리
-    throw new Error("알 수 없는 오류가 발생했습니다.");
   } finally {
     if (!authenticated) {
+      cookies().delete("token");
       revalidatePath("/login");
       redirect("/login");
     }
-    return (response?.data ?? {}) as T;
+    return {
+      data: response?.data as T,
+      error,
+    };
   }
+};
+
+export type SimpleResponse<T> = {
+  data?: T;
+  error?: AxiosError;
 };
 
 export default axiosInstance;

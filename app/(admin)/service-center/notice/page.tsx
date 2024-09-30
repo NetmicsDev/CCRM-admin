@@ -17,7 +17,7 @@ export default function NoticePage() {
           공지사항 추가하기
         </Link>
       </div>
-      <Suspense fallback={<></>}>
+      <Suspense fallback={<div></div>}>
         <NoticeList />
       </Suspense>
     </div>
