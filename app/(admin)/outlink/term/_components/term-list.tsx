@@ -32,6 +32,7 @@ export const TermList: React.FC = () => {
       setTerms(data);
     };
     fetchTerms();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum]);
 
   const columns = [

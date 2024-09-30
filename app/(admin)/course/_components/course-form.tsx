@@ -4,12 +4,11 @@ import { TextField } from "@/app/_components/Input";
 import SelectField from "@/app/_components/Input/select-field";
 import CourseModel from "@/app/_models/course";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function CourseForm({
   course = CourseModel.empty(),
   title,
-  onSubmit = (_) => {},
+  onSubmit = () => {},
 }: {
   course?: CourseModel;
   title: string;

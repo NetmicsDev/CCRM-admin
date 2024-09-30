@@ -32,6 +32,7 @@ export const FaqList: React.FC = () => {
       setFaqList(data);
     };
     fetchFaqs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum]);
 
   const columns = [

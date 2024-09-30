@@ -4,17 +4,12 @@
 import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import useModalStore, { ModalType } from "@utils/store/modal";
-import Icon from "../Icon";
 
 // 첫 번째 팝업 컴포넌트
-const AlertModal = ({
-  title,
-  description,
-}: {
-  title: string;
-  description: string;
-}) => {
-  const { closeModal } = useModalStore();
+const AlertModal = () => {
+  const { closeModal, params } = useModalStore();
+
+  const { title, description } = params;
 
   return (
     <div className="flex flex-col items-center">
@@ -33,16 +28,19 @@ const AlertModal = ({
 };
 
 // 두 번째 팝업 컴포넌트
-const ConfirmModal = ({
-  title,
-  description,
-  onConfirm,
-}: {
-  title: string;
-  description: string;
-  onConfirm: () => void;
-}) => {
-  const { closeModal } = useModalStore();
+const ConfirmModal = () => {
+  const { closeModal, params } = useModalStore();
+  const { title, description, resolve } = params;
+
+  const handleConfirm = () => {
+    resolve?.(true);
+    closeModal();
+  };
+
+  const handleCancel = () => {
+    resolve?.(false);
+    closeModal();
+  };
 
   return (
     <div className="flex flex-col items-center">
@@ -53,13 +51,13 @@ const ConfirmModal = ({
       <div className="flex mt-4 gap-4">
         <button
           className="bg-gray-500 text-white px-4 py-2 rounded"
-          onClick={closeModal}
+          onClick={handleCancel}
         >
           취소
         </button>
         <button
           className="bg-gray-800 text-white px-4 py-2 rounded"
-          onClick={onConfirm}
+          onClick={handleConfirm}
         >
           확인
         </button>
@@ -97,7 +95,7 @@ const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
 
 // Modal 관리하는 컴포넌트
 const ModalManager: React.FC = () => {
-  const { activeModal, params } = useModalStore();
+  const { activeModal } = useModalStore();
 
   const isModalOpen = activeModal !== ModalType.NONE;
 
@@ -112,12 +110,8 @@ const ModalManager: React.FC = () => {
   return isModalOpen
     ? ReactDOM.createPortal(
         <ModalWrapper>
-          {activeModal === ModalType.ALERT ? (
-            <AlertModal title={params.title} description={params.description} />
-          ) : null}
-          {activeModal === ModalType.CONFIRM ? (
-            <ConfirmModal {...params} />
-          ) : null}
+          {activeModal === ModalType.ALERT ? <AlertModal /> : null}
+          {activeModal === ModalType.CONFIRM ? <ConfirmModal /> : null}
         </ModalWrapper>,
         document.body // Portal을 사용하여 body에 직접 렌더링
       )

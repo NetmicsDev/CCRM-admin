@@ -1,6 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Icon from "./Icon";
 import cn from "../_utils/cn";

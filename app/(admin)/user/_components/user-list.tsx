@@ -32,6 +32,7 @@ const UserListView = () => {
       setUsers(data);
     };
     fetchUsers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum]);
 
   const columns = [

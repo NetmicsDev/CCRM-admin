@@ -1,4 +1,3 @@
-import { Pagination } from "@/app/_components/Pagination";
 import { NoticeList } from "./_components/notice-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
