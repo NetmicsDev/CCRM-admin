@@ -8,22 +8,31 @@ import { useSearchParams } from "next/navigation";
 import PageList from "@/app/_models/page-list";
 import { Pagination } from "@/app/_components/Pagination";
 import DiseaseModel from "@/app/_models/disease";
-import getDiseases from "@/app/_services/disease";
+import { getDiseases } from "@/app/_services/disease";
+import useModalStore from "@/app/_utils/store/modal";
 
 export const DiseaseList: React.FC = () => {
+  const { openAlert } = useModalStore();
   const searchParams = useSearchParams();
   const pageNum: number = Number(searchParams.get("page") ?? "1");
 
   const [diseases, setDiseases] = useState<PageList<DiseaseModel>>();
 
   useEffect(() => {
-    getDiseases(pageNum)
-      .then((data) => {
-        setDiseases(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchDiseases = async () => {
+      const { data, error } = await getDiseases(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setDiseases(data);
+    };
+    fetchDiseases();
   }, [pageNum]);
 
   const columns = [

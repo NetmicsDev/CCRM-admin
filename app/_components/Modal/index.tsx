@@ -1,7 +1,7 @@
 // components/Popup.tsx
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import ReactDOM from "react-dom";
 import useModalStore, { ModalType } from "@utils/store/modal";
 import Icon from "../Icon";
@@ -99,17 +99,29 @@ const ModalWrapper = ({ children }: { children: React.ReactNode }) => {
 const ModalManager: React.FC = () => {
   const { activeModal, params } = useModalStore();
 
-  if (activeModal === ModalType.NONE) return null;
+  const isModalOpen = activeModal !== ModalType.NONE;
 
-  return ReactDOM.createPortal(
-    <ModalWrapper>
-      {activeModal === ModalType.ALERT ? (
-        <AlertModal title={params.title} description={params.description} />
-      ) : null}
-      {activeModal === ModalType.CONFIRM ? <ConfirmModal {...params} /> : null}
-    </ModalWrapper>,
-    document.body // Portal을 사용하여 body에 직접 렌더링
-  );
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else if (document.body.classList.contains("overflow-hidden")) {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [isModalOpen]);
+
+  return isModalOpen
+    ? ReactDOM.createPortal(
+        <ModalWrapper>
+          {activeModal === ModalType.ALERT ? (
+            <AlertModal title={params.title} description={params.description} />
+          ) : null}
+          {activeModal === ModalType.CONFIRM ? (
+            <ConfirmModal {...params} />
+          ) : null}
+        </ModalWrapper>,
+        document.body // Portal을 사용하여 body에 직접 렌더링
+      )
+    : null;
 };
 
 export default ModalManager;

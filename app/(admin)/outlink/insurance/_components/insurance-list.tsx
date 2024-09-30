@@ -7,23 +7,31 @@ import { useSearchParams } from "next/navigation";
 import PageList from "@/app/_models/page-list";
 import { Pagination } from "@/app/_components/Pagination";
 import InsuranceModel from "@/app/_models/insurance";
-import getInsurances from "@/app/_services/insurance";
+import { getInsurances } from "@/app/_services/insurance";
+import useModalStore from "@/app/_utils/store/modal";
 
 export const InsuranceList: React.FC = () => {
+  const { openAlert } = useModalStore();
   const searchParams = useSearchParams();
   const pageNum: number = Number(searchParams.get("page") ?? "1");
 
-  const [insuranceList, setInsuranceList] =
-    useState<PageList<InsuranceModel>>();
+  const [insurances, setInsurances] = useState<PageList<InsuranceModel>>();
 
   useEffect(() => {
-    getInsurances(pageNum)
-      .then((data) => {
-        setInsuranceList(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchInsurances = async () => {
+      const { data, error } = await getInsurances(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setInsurances(data);
+    };
+    fetchInsurances();
   }, [pageNum]);
 
   const columns = [
@@ -39,16 +47,13 @@ export const InsuranceList: React.FC = () => {
       <div className="block flex-1 overflow-auto">
         <Table
           columns={columns}
-          data={insuranceList?.data ?? []}
+          data={insurances?.data ?? []}
           renderRow={(insurance) => (
             <InsuranceItem key={insurance.id} insurance={insurance} />
           )}
         />
       </div>
-      <Pagination
-        totalCount={insuranceList?.total ?? 0}
-        currentPage={pageNum}
-      />
+      <Pagination totalCount={insurances?.total ?? 0} currentPage={pageNum} />
     </>
   );
 };

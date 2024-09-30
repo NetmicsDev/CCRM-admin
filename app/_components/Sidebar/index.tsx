@@ -43,10 +43,10 @@ export default function Sidebar() {
                   href: "/service-center/faq",
                   title: "FAQ",
                 },
-                {
-                  href: "/service-center/inquiry",
-                  title: "1:1 문의",
-                },
+                // {
+                //   href: "/service-center/inquiry",
+                //   title: "1:1 문의",
+                // },
               ]}
             />
           </li>

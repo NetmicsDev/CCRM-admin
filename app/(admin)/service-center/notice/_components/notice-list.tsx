@@ -6,24 +6,33 @@ import { Table, Td } from "@/app/_components/Table";
 import NoticeItem from "./notice-item";
 import { useSearchParams } from "next/navigation";
 import PageList from "@/app/_models/page-list";
-import getNotices from "@/app/_services/notice";
+import { getNotices } from "@/app/_services/notice";
 import { Pagination } from "@/app/_components/Pagination";
 import NoticeModel from "@/app/_models/notice";
+import useModalStore from "@/app/_utils/store/modal";
 
 export const NoticeList: React.FC = () => {
+  const { openAlert } = useModalStore();
   const searchParams = useSearchParams();
   const pageNum: number = Number(searchParams.get("page") ?? "1");
 
   const [notices, setNotices] = useState<PageList<NoticeModel>>();
 
   useEffect(() => {
-    getNotices(pageNum)
-      .then((data) => {
-        setNotices(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchNotices = async () => {
+      const { data, error } = await getNotices(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setNotices(data);
+    };
+    fetchNotices();
   }, [pageNum]);
 
   const columns = [

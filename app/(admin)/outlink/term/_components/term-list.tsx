@@ -1,29 +1,37 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Icon from "@/app/_components/Icon";
-import { Table, Td } from "@/app/_components/Table";
+import { Table } from "@/app/_components/Table";
 import TermItem from "./term-item";
 import { useSearchParams } from "next/navigation";
 import PageList from "@/app/_models/page-list";
-import getTerms from "@/app/_services/term";
+import { getTerms } from "@/app/_services/term";
 import { Pagination } from "@/app/_components/Pagination";
 import TermModel from "@/app/_models/term";
+import useModalStore from "@/app/_utils/store/modal";
 
 export const TermList: React.FC = () => {
+  const { openAlert } = useModalStore();
   const searchParams = useSearchParams();
   const pageNum: number = Number(searchParams.get("page") ?? "1");
 
   const [terms, setTerms] = useState<PageList<TermModel>>();
 
   useEffect(() => {
-    getTerms(pageNum)
-      .then((data) => {
-        setTerms(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const fetchTerms = async () => {
+      const { data, error } = await getTerms(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setTerms(data);
+    };
+    fetchTerms();
   }, [pageNum]);
 
   const columns = [
