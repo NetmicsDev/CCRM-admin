@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Icon from "@/app/_components/Icon";
-import { Table, Td } from "@/app/_components/Table";
+import { Table } from "@/app/_components/Table";
 import DiseaseItem from "./disease-item";
 import { useSearchParams } from "next/navigation";
 import PageList from "@/app/_models/page-list";
@@ -33,6 +32,7 @@ export const DiseaseList: React.FC = () => {
       setDiseases(data);
     };
     fetchDiseases();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum]);
 
   const columns = [

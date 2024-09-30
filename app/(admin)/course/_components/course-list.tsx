@@ -32,6 +32,7 @@ export const CourseList: React.FC = () => {
       setCourses(data);
     };
     fetchCourses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum]);
 
   return (

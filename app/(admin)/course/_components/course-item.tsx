@@ -8,32 +8,34 @@ import { deleteCourse } from "@/app/_services/course";
 import cn from "@/app/_utils/cn";
 import { formatDateToKorean } from "@/app/_utils/format";
 import useModalStore from "@/app/_utils/store/modal";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function CourseItem({ course }: { course: CourseModel }) {
   const { openConfirm, openAlert } = useModalStore();
   const router = useRouter();
-  const handleDelete = () => {
-    openConfirm({
+  const handleDelete = async () => {
+    const confirmDelete = await openConfirm({
       title: "강의 삭제",
       description: "정말로 삭제하시겠습니까?",
-      onConfirm: async () => {
-        const { error } = await deleteCourse(course.id);
-        if (error) {
-          openAlert({
-            title: "강의 삭제 오류",
-            description: error.message,
-          });
-        } else {
-          openAlert({
-            title: "강의 삭제",
-            description: "강의 삭제 완료!",
-          });
-          window.location.reload();
-        }
-      },
     });
+
+    if (!confirmDelete) {
+      return;
+    }
+
+    const { error } = await deleteCourse(course.id);
+    if (error) {
+      openAlert({
+        title: "강의 삭제 오류",
+        description: error.message,
+      });
+    } else {
+      await openAlert({
+        title: "강의 삭제",
+        description: "강의 삭제 완료!",
+      });
+      window.location.reload();
+    }
   };
   return (
     <tr className="hover:bg-gray-50">

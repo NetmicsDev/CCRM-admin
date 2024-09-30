@@ -14,7 +14,7 @@ interface ModalState {
   params: {
     title: string;
     description: string;
-    onConfirm: () => void;
+    resolve?: (value?: any) => void;
   };
   openAlert: ({
     title,
@@ -22,16 +22,14 @@ interface ModalState {
   }: {
     title: string;
     description: string;
-  }) => void;
+  }) => Promise<void>;
   openConfirm: ({
     title,
     description,
-    onConfirm,
   }: {
     title: string;
     description: string;
-    onConfirm: () => void;
-  }) => void;
+  }) => Promise<boolean>;
   closeModal: () => void; // 팝업 닫기
 }
 
@@ -40,7 +38,6 @@ const useModalStore = create<ModalState>((set) => ({
   params: {
     title: "",
     description: "",
-    onConfirm: () => {},
   },
   openAlert: ({
     title,
@@ -49,37 +46,40 @@ const useModalStore = create<ModalState>((set) => ({
     title: string;
     description: string;
   }) => {
-    set({
-      activeModal: ModalType.ALERT,
-      params: {
-        title,
-        description,
-        onConfirm: () => set({ activeModal: ModalType.NONE }),
-      },
+    return new Promise<void>((resolve) => {
+      set({
+        activeModal: ModalType.ALERT,
+        params: {
+          title,
+          description,
+          resolve,
+        },
+      });
     });
   },
   openConfirm: ({
     title,
     description,
-    onConfirm,
   }: {
     title: string;
     description: string;
-    onConfirm: () => void;
   }) => {
-    set({
-      activeModal: ModalType.CONFIRM,
-      params: {
-        title,
-        description,
-        onConfirm: () => {
-          onConfirm();
-          set({ activeModal: ModalType.NONE });
+    return new Promise<boolean>((resolve) => {
+      set({
+        activeModal: ModalType.CONFIRM,
+        params: {
+          title,
+          description,
+          resolve,
         },
-      },
+      });
     });
   },
-  closeModal: () => set({ activeModal: ModalType.NONE }),
+  closeModal: () =>
+    set((state) => {
+      state.params.resolve?.();
+      return { activeModal: ModalType.NONE };
+    }),
 }));
 
 export default useModalStore;

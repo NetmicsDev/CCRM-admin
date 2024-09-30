@@ -1,4 +1,3 @@
-import React from "react";
 import { Search, Settings, Bell } from "lucide-react";
 
 export const Header = () => (

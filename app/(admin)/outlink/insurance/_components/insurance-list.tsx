@@ -32,6 +32,7 @@ export const InsuranceList: React.FC = () => {
       setInsurances(data);
     };
     fetchInsurances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNum]);
 
   const columns = [
