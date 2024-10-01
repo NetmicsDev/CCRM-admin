@@ -1,3 +1,5 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import NoticeForm from "../_components/notice-form";
 import useModalStore from "@/app/_utils/store/modal";

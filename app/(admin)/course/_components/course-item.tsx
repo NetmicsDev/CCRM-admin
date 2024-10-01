@@ -1,6 +1,5 @@
 "use client";
 
-import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
 import TableRow from "@/app/(admin)/_components/table-row";
 import CourseModel from "@/app/_models/course";

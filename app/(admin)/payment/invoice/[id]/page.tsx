@@ -38,6 +38,7 @@ export default function InvoiceDetailPage({
       };
       fetchInvoice();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   useEffect(() => {

@@ -30,7 +30,7 @@ export default function FaqForm({
   };
 
   return (
-    <form className="flex flex-col h-full">
+    <form className="flex flex-col h-full" action={handleSubmit}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
       </div>

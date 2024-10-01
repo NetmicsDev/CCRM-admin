@@ -1,7 +1,5 @@
 "use client";
 
-import Dropdown from "@/app/_components/Dropdown";
-import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
 import TableRow from "@/app/(admin)/_components/table-row";
 import NoticeModel from "@/app/_models/notice";

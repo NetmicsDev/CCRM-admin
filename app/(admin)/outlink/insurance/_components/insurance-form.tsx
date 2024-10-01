@@ -1,13 +1,9 @@
 "use client";
 
-import Icon from "@/app/_components/Icon";
 import { TextField } from "@/app/_components/Input";
-import TextAreaField from "@/app/_components/Input/area-field";
-import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
 import InsuranceModel from "@/app/_models/insurance";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function InsuranceForm({
   insurance = InsuranceModel.empty(),
