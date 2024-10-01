@@ -1,3 +1,5 @@
+import GoogleMetadataModel, { GoogleMetadataDTO } from "./google-metadata";
+
 export type UserDTO = {
   id: string;
   name: string;
@@ -5,7 +7,11 @@ export type UserDTO = {
   username: string;
   phoneNumber: string;
   createdAt: string;
-  subscriptionStatus: string;
+  googleMetadata?: GoogleMetadataDTO;
+  paymentMetadata?: {
+    subscriptionStatus: string;
+    renewalDate: string;
+  };
 };
 
 export default class UserModel {
@@ -15,7 +21,11 @@ export default class UserModel {
   username: string;
   phoneNumber: string;
   createdAt: string;
-  subscriptionStatus: string;
+  googleMetadata?: GoogleMetadataModel;
+  paymentMetadata?: {
+    subscriptionStatus: string;
+    renewalDate: string;
+  };
 
   constructor(
     id: string,
@@ -24,7 +34,13 @@ export default class UserModel {
     username: string,
     phoneNumber: string,
     createdAt: string,
-    subscriptionStatus: string
+    googleMetadata: GoogleMetadataModel | undefined,
+    paymentMetadata:
+      | {
+          subscriptionStatus: string;
+          renewalDate: string;
+        }
+      | undefined
   ) {
     this.id = id;
     this.name = name;
@@ -32,7 +48,8 @@ export default class UserModel {
     this.username = username;
     this.phoneNumber = phoneNumber;
     this.createdAt = createdAt;
-    this.subscriptionStatus = subscriptionStatus;
+    this.googleMetadata = googleMetadata;
+    this.paymentMetadata = paymentMetadata;
   }
 
   // DTO 데이터를 받아 Model로 변환
@@ -44,7 +61,10 @@ export default class UserModel {
       userDTO.username,
       userDTO.phoneNumber,
       userDTO.createdAt,
-      userDTO.subscriptionStatus
+      userDTO.googleMetadata
+        ? GoogleMetadataModel.fromJson(userDTO.googleMetadata)
+        : undefined,
+      userDTO.paymentMetadata
     );
   }
 
@@ -57,7 +77,14 @@ export default class UserModel {
       username: this.username,
       phoneNumber: this.phoneNumber,
       createdAt: this.createdAt,
-      subscriptionStatus: this.subscriptionStatus,
+      googleMetadata: this.googleMetadata
+        ? this.googleMetadata.toJson()
+        : undefined,
+      paymentMetadata: this.paymentMetadata,
     };
+  }
+
+  toString(): string {
+    return JSON.stringify(this.toJson());
   }
 }

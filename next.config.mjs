@@ -7,11 +7,6 @@ const nextConfig = {
         destination: "/dashboard",
         permanent: true,
       },
-      {
-        source: "/payment",
-        destination: "/payment/invoice",
-        permanent: true,
-      },
     ];
   },
 };

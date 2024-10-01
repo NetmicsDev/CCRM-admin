@@ -85,10 +85,6 @@ export default function Sidebar() {
                   href: "/payment/invoice",
                   title: "인보이스",
                 },
-                {
-                  href: "/payment/info",
-                  title: "결제 정보",
-                },
               ]}
             />
           </li>
