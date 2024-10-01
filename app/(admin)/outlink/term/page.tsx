@@ -1,8 +1,8 @@
-import { Pagination } from "@/app/_components/Pagination";
 import TermList from "./_components/term-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
 import { Suspense } from "react";
+import React from "react";
 
 export default function NoticePage() {
   return (

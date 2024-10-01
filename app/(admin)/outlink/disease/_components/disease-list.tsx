@@ -48,8 +48,8 @@ export const DiseaseList: React.FC = () => {
         <Table
           columns={columns}
           data={diseases?.data ?? []}
-          renderRow={(inquiry) => (
-            <DiseaseItem key={inquiry.id} inquiry={inquiry} />
+          renderRow={(disease) => (
+            <DiseaseItem key={disease.id} disease={disease} />
           )}
         />
       </div>

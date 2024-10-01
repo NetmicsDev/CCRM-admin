@@ -1,4 +1,3 @@
-import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
 import UserModel from "@/app/_models/user";
 import cn from "@/app/_utils/cn";

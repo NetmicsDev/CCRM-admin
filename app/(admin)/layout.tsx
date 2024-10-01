@@ -1,3 +1,4 @@
+import React from "react";
 import { Breadcrumb } from "../_components/Breadcrumb";
 import { Footer } from "../_components/Footer";
 import Sidebar from "../_components/Sidebar";

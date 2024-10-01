@@ -1,13 +1,7 @@
 "use client";
 
-import Icon from "@/app/_components/Icon";
-import { TextField } from "@/app/_components/Input";
-import TextAreaField from "@/app/_components/Input/area-field";
-import FileField from "@/app/_components/Input/file-field";
-import SelectField from "@/app/_components/Input/select-field";
 import DiseaseModel from "@/app/_models/disease";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function DiseaseForm({
   disease = DiseaseModel.empty(),

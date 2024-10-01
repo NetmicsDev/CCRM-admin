@@ -47,6 +47,7 @@ export default function PaymentInfoPage({
       fetchUser();
       fetchPayment();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   return (

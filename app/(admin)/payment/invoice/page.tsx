@@ -1,9 +1,5 @@
 import React, { Suspense } from "react";
-import { Header } from "../../../_components/Header";
-import { Breadcrumb } from "../../../_components/Breadcrumb";
 import { InvoiceList } from "./_components/invoice-list";
-import { Pagination } from "../../../_components/Pagination";
-import { Footer } from "../../../_components/Footer";
 
 export default function InvoicePage() {
   return (
