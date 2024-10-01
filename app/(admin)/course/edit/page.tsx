@@ -40,7 +40,7 @@ const CourseEditInner = () => {
         description: error.message,
       });
     } else {
-      openAlert({
+      await openAlert({
         title: "강의 업데이트",
         description: "강의 업데이트 완료!",
       });

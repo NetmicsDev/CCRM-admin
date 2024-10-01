@@ -1,22 +1,33 @@
 "use client";
 
-import Icon from "@/app/_components/Icon";
 import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
-import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
 import FaqModel from "@/app/_models/faq";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function FaqForm({
-  faq,
+  faq = FaqModel.empty(),
   title,
+  onSubmit = () => {},
 }: {
   faq?: FaqModel;
   title: string;
+  onSubmit?: (course: FaqModel) => void;
 }) {
-  const [formData, setFormData] = useState<FaqModel>(faq ?? FaqModel.empty());
+  const handleSubmit = async (formData: FormData) => {
+    const newNotice = new FaqModel(
+      faq?.id,
+      formData.get("category") as string,
+      formData.get("title") as string,
+      formData.get("content") as string,
+      formData.get("public") as string,
+      faq?.createdAt,
+      new Date(),
+      formData.get("attachment") as string
+    );
+    onSubmit(newNotice);
+  };
 
   return (
     <form className="flex flex-col h-full">
@@ -29,7 +40,7 @@ export default function FaqForm({
           name="title"
           label="제목"
           placeholder="제목을 작성해주세요"
-          value={formData.title}
+          value={faq.title}
           required
         />
 
@@ -37,7 +48,7 @@ export default function FaqForm({
           name="content"
           label="내용"
           placeholder="내용을 작성해주세요"
-          value={formData.content}
+          value={faq.content}
           className="h-24"
           required
         />
@@ -46,7 +57,7 @@ export default function FaqForm({
           <SelectField
             name="category"
             label="카테고리"
-            defaultValue={formData.category}
+            defaultValue={faq.category}
             options={[
               { text: "결제 관련", value: "결제" },
               { text: "회원 관련", value: "회원" },
@@ -59,7 +70,7 @@ export default function FaqForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.isPublished ? 1 : 0}
+            defaultValue={faq.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },
@@ -71,7 +82,7 @@ export default function FaqForm({
           name="logo-file"
           label="파일 업로드"
           accept="image/*"
-          placeholder={formData.attachment ? formData.attachment : "파일을 업로드해주세요"}
+          placeholder={faq.attachment ? faq.attachment : "파일을 업로드해주세요"}
           icon="file-image"
         /> */}
 
@@ -79,7 +90,7 @@ export default function FaqForm({
           name="url"
           label="URL"
           placeholder="URL를 입력해주세요"
-          defaultValue={formData.attachment}
+          defaultValue={faq.attachment}
           required
         />
       </div>

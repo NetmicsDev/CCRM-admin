@@ -1,33 +1,54 @@
+import TableRow from "@/app/(admin)/_components/table-row";
 import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
 import InsuranceModel from "@/app/_models/insurance";
+import { deleteInsurance } from "@/app/_services/insurance";
 import { formatDateToKorean } from "@/app/_utils/format";
+import useModalStore from "@/app/_utils/store/modal";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function InsuranceItem({
   insurance,
 }: {
   insurance: InsuranceModel;
 }) {
+  const router = useRouter();
+  const { openAlert, openConfirm } = useModalStore();
+
+  const handleDelete = async () => {
+    const confirmDelete = await openConfirm({
+      title: " 삭제",
+      description: "정말로 삭제하시겠습니까?",
+    });
+    if (confirmDelete) {
+      const { error } = await deleteInsurance(insurance.id);
+      if (error) {
+        openAlert({
+          title: "보험 청구 삭제 오류",
+          description: error.message,
+        });
+      } else {
+        await openAlert({
+          title: "보험 청구 삭제",
+          description: "보험 청구 삭제 완료!",
+        });
+        window.location.reload();
+      }
+    }
+  };
+
   return (
-    <tr className="hover:bg-gray-50">
+    <TableRow
+      onEdit={() =>
+        router.push(`/outlink/insurance/edit?data=${JSON.stringify(insurance)}`)
+      }
+      onDelete={handleDelete}
+    >
       <Td>{insurance.id}</Td>
       <Td>{insurance.category}</Td>
       <Td>{insurance.insurerName}</Td>
       <Td>{formatDateToKorean(insurance.updatedAt)}</Td>
-      <Td className="w-0 space-x-2">
-        <Link
-          href={`/outlink/insurance/edit?data=${JSON.stringify(
-            insurance.toJson()
-          )}`}
-          className="inline-flex p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
-        >
-          <Icon type="square-pen" className="w-5 h-5" />
-        </Link>
-        <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-          <Icon type="more-vertical" className="h-5 w-5" />
-        </button>
-      </Td>
-    </tr>
+    </TableRow>
   );
 }

@@ -1,28 +1,49 @@
+import TableRow from "@/app/(admin)/_components/table-row";
 import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
 import DiseaseModel from "@/app/_models/disease";
+import { deleteDisease } from "@/app/_services/disease";
 import { formatDateToKorean } from "@/app/_utils/format";
+import useModalStore from "@/app/_utils/store/modal";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-export default function DiseaseItem({ inquiry }: { inquiry: DiseaseModel }) {
+export default function DiseaseItem({ disease }: { disease: DiseaseModel }) {
+  const router = useRouter();
+  const { openAlert, openConfirm } = useModalStore();
+
+  const handleDelete = async () => {
+    const confirmDelete = await openConfirm({
+      title: " 삭제",
+      description: "정말로 삭제하시겠습니까?",
+    });
+    if (confirmDelete) {
+      const { error } = await deleteDisease(disease.id);
+      if (error) {
+        openAlert({
+          title: "질병 코드 삭제 오류",
+          description: error.message,
+        });
+      } else {
+        await openAlert({
+          title: "질병 코드 삭제",
+          description: "질병 코드 삭제 완료!",
+        });
+        window.location.reload();
+      }
+    }
+  };
+
   return (
-    <tr key={inquiry.id} className="hover:bg-gray-50">
-      <Td>{inquiry.id}</Td>
-      <Td>{inquiry.depth}</Td>
-      <Td>{inquiry.title}</Td>
-      <Td className="w-0 space-x-2">
-        <Link
-          href={`/outlink/disease/edit?data=${JSON.stringify(
-            inquiry.toJson()
-          )}`}
-          className="inline-flex p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
-        >
-          <Icon type="square-pen" className="w-5 h-5" />
-        </Link>
-        <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-          <Icon type="more-vertical" className="h-5 w-5" />
-        </button>
-      </Td>
-    </tr>
+    <TableRow
+      onEdit={() =>
+        router.push(`/outlink/disease/edit?data=${JSON.stringify(disease)}`)
+      }
+      onDelete={handleDelete}
+    >
+      <Td>{disease.id}</Td>
+      <Td>{disease.depth}</Td>
+      <Td>{disease.title}</Td>
+    </TableRow>
   );
 }

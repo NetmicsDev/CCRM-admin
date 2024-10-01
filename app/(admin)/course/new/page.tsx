@@ -17,7 +17,7 @@ export default function CourseNewPage() {
         description: error.message,
       });
     } else {
-      openAlert({
+      await openAlert({
         title: "강의 추가",
         description: "강의 추가 완료!",
       });

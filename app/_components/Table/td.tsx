@@ -8,6 +8,6 @@ export default function Td({
   children?: React.ReactNode;
 }) {
   return (
-    <td className={cn("px-2 py-3 whitespace-nowrap", className)}>{children}</td>
+    <td className={cn("px-2 py-2 whitespace-nowrap", className)}>{children}</td>
   );
 }
