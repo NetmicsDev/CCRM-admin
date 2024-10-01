@@ -28,6 +28,18 @@ export async function getUsers(
   return { data: newData, error };
 }
 
+export async function getUser(id: string): Promise<SimpleResponse<UserModel>> {
+  const { data, error } = await apiRequest<UserDTO>(`${endpoint}/${id}`, {
+    method: "GET",
+  });
+
+  if (error) {
+    return { data: undefined, error };
+  }
+
+  return { data: UserModel.fromJson(data!), error };
+}
+
 export async function addUser(user: UserModel) {
   const { data, error } = await apiRequest<UserDTO>(endpoint, {
     method: "POST",

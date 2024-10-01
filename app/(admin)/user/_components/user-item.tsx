@@ -41,7 +41,7 @@ export default function UserItem({ user }: { user: UserModel }) {
           icon: "wallet-cards",
           label: "결제 정보",
           onClick: () => {
-            router.push(`/payment/info?user=${user.id}`);
+            router.push(`/user/payment/${user.id}`);
           },
         },
       ]}
@@ -56,16 +56,19 @@ export default function UserItem({ user }: { user: UserModel }) {
           className={cn(
             "inline-block rounded-full bg-green-500 w-1 h-1 p-1 mr-2 ",
             {
-              "bg-red-500": user.subscriptionStatus === "CANCELED",
-              "bg-yellow-500": user.subscriptionStatus === "FREE_TRIAL",
+              "bg-red-500":
+                user.paymentMetadata?.subscriptionStatus === "CANCELED",
+              "bg-yellow-500":
+                user.paymentMetadata?.subscriptionStatus === "FREE_TRIAL",
             }
           )}
         />
-        {user.subscriptionStatus === "CANCELED"
+        {user.paymentMetadata?.subscriptionStatus ?? "무료 체험"}
+        {/* {user.subscriptionStatus === "CANCELED"
           ? "구독 해지"
           : user.subscriptionStatus === ""
           ? "구독 중"
-          : "무료 체험"}
+          : "무료 체험"} */}
       </Td>
     </TableRow>
   );
