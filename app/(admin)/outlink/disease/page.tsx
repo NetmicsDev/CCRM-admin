@@ -9,7 +9,7 @@ export default function DiseasePage() {
       <div className="flex w-full justify-between items-center mb-4">
         <h1 className="text-xl font-semibold ">질병 코드</h1>
         <Link
-          href={"/outlink/insurance/new"}
+          href={"/outlink/disease/new"}
           className="rounded-full py-1.5 pl-2.5 pr-4 flex items-center text-white text-sm font-medium bg-gray-700 hover:bg-gray-800"
         >
           <Icon type="plus" className="w-4 h-4 mr-1" />

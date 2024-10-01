@@ -113,7 +113,7 @@ const ModalManager: React.FC = () => {
           {activeModal === ModalType.ALERT ? <AlertModal /> : null}
           {activeModal === ModalType.CONFIRM ? <ConfirmModal /> : null}
         </ModalWrapper>,
-        document.body // Portal을 사용하여 body에 직접 렌더링
+        document.getElementById("modal-container") ?? document.body // Portal을 사용하여 body에 직접 렌더링
       )
     : null;
 };

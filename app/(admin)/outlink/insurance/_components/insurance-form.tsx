@@ -10,18 +10,31 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function InsuranceForm({
-  insurance,
+  insurance = InsuranceModel.empty(),
   title,
+  onSubmit = () => {},
 }: {
   insurance?: InsuranceModel;
   title: string;
+  onSubmit?: (course: InsuranceModel) => void;
 }) {
-  const [formData, setFormData] = useState<InsuranceModel>(
-    insurance ?? InsuranceModel.empty()
-  );
+  const handleSubmit = async (formData: FormData) => {
+    const newInsurance = InsuranceModel.empty();
+    // new InsuranceModel(
+    //   insurance?.id,
+    //   formData.get("category") as string,
+    //   formData.get("title") as string,
+    //   formData.get("content") as string,
+    //   formData.get("public") as string,
+    //   insurance?.createdAt,
+    //   new Date(),
+    //   formData.get("attachment") as string
+    // );
+    onSubmit(newInsurance);
+  };
 
   return (
-    <form className="flex flex-col h-full">
+    <form className="flex flex-col h-full" action={handleSubmit}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
       </div>
@@ -48,7 +61,7 @@ export default function InsuranceForm({
           <SelectField
             name="category"
             label="카테고리"
-            defaultValue={formData.category}
+            defaultValue={insurance.category}
             options={[
               { text: "결제 관련", value: "결제" },
               { text: "회원 관련", value: "회원" },
@@ -61,7 +74,7 @@ export default function InsuranceForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.isPublished ? 1 : 0}
+            defaultValue={insurance.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },
@@ -73,7 +86,7 @@ export default function InsuranceForm({
           name="logo-file"
           label="파일 업로드"
           accept="image/*"
-          placeholder={formData.attachment ? formData.attachment : "파일을 업로드해주세요"}
+          placeholder={insurance.attachment ? insurance.attachment : "파일을 업로드해주세요"}
           icon="file-image"
         /> */}
 
@@ -81,7 +94,7 @@ export default function InsuranceForm({
           name="url"
           label="URL"
           placeholder="URL를 입력해주세요"
-          defaultValue={formData.link}
+          defaultValue={insurance.link}
           required
         />
       </div>

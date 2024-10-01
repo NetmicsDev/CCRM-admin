@@ -3,10 +3,49 @@ import { Td } from "@/app/_components/Table";
 import UserModel from "@/app/_models/user";
 import cn from "@/app/_utils/cn";
 import { formatDateToKorean } from "@/app/_utils/format";
+import TableRow from "../../_components/table-row";
+import useModalStore from "@/app/_utils/store/modal";
+import { useRouter } from "next/navigation";
+import { deleteUser } from "@/app/_services/user";
 
 export default function UserItem({ user }: { user: UserModel }) {
+  const router = useRouter();
+  const { openAlert, openConfirm } = useModalStore();
+  const handleDelete = async () => {
+    const confirmDelete = await openConfirm({
+      title: " 삭제",
+      description: "정말로 삭제하시겠습니까?",
+    });
+    if (confirmDelete) {
+      const { error } = await deleteUser(user.id);
+      if (error) {
+        openAlert({
+          title: "유저 삭제 오류",
+          description: error.message,
+        });
+      } else {
+        await openAlert({
+          title: "유저 삭제",
+          description: "유저 삭제 완료!",
+        });
+        window.location.reload();
+      }
+    }
+  };
+
   return (
-    <tr key={user.id} className="hover:bg-gray-50">
+    <TableRow
+      onDelete={handleDelete}
+      dropdownOptions={[
+        {
+          icon: "wallet-cards",
+          label: "결제 정보",
+          onClick: () => {
+            router.push(`/payment/info?user=${user.id}`);
+          },
+        },
+      ]}
+    >
       <Td>{user.id}</Td>
       <Td>{user.email}</Td>
       <Td>{user.name}</Td>
@@ -28,16 +67,6 @@ export default function UserItem({ user }: { user: UserModel }) {
           ? "구독 중"
           : "무료 체험"}
       </Td>
-      <Td>
-        <button className="px-3 py-1 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition-colors">
-          결제 정보
-        </button>
-      </Td>
-      <Td className="w-0">
-        <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-          <Icon type="more-vertical" className="h-5 w-5" />
-        </button>
-      </Td>
-    </tr>
+    </TableRow>
   );
 }

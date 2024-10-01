@@ -1,29 +1,37 @@
 "use client";
 
-import Icon from "@/app/_components/Icon";
 import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
 import NoticeModel from "@/app/_models/notice";
-import { formatDateToKorean } from "@/app/_utils/format";
 import Link from "next/link";
-import { format } from "path";
-import { useState } from "react";
 
 export default function NoticeForm({
-  notice,
+  notice = NoticeModel.empty(),
   title,
+  onSubmit = () => {},
 }: {
   notice?: NoticeModel;
   title: string;
+  onSubmit?: (course: NoticeModel) => void;
 }) {
-  const [formData, setFormData] = useState<NoticeModel>(
-    notice ?? NoticeModel.empty()
-  );
+  const handleSubmit = async (formData: FormData) => {
+    const newNotice = new NoticeModel(
+      notice?.id,
+      formData.get("category") as string,
+      formData.get("title") as string,
+      formData.get("content") as string,
+      formData.get("public") as string,
+      notice?.createdAt,
+      new Date(),
+      formData.get("attachment") as string
+    );
+    onSubmit(newNotice);
+  };
 
   return (
-    <form className="flex flex-col h-full">
+    <form className="flex flex-col h-full" action={handleSubmit}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
       </div>
@@ -33,7 +41,7 @@ export default function NoticeForm({
           name="title"
           label="제목"
           placeholder="제목을 작성해주세요"
-          value={formData.title}
+          value={notice.title}
           required
         />
 
@@ -41,7 +49,7 @@ export default function NoticeForm({
           name="content"
           label="내용"
           placeholder="내용을 작성해주세요"
-          value={formData.content}
+          value={notice.content}
           className="h-60"
           required
         />
@@ -50,7 +58,7 @@ export default function NoticeForm({
           <SelectField
             name="category"
             label="카테고리"
-            defaultValue={formData.category}
+            defaultValue={notice.category}
             options={[
               { text: "공지사항", value: "notice" },
               { text: "메인상단", value: "main" },
@@ -60,7 +68,7 @@ export default function NoticeForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.isPublished ? 1 : 0}
+            defaultValue={notice.isPublished ? 1 : 0}
             options={[
               { text: "공개", value: 1 },
               { text: "비공개", value: 0 },
@@ -68,21 +76,15 @@ export default function NoticeForm({
           />
         </div>
 
-        {/* <FileField
-          name="logo-file"
+        <FileField
+          name="attachment"
           label="파일 업로드"
           accept="image/*"
-          placeholder={formData.logo ? formData.logo : "파일을 업로드해주세요"}
+          placeholder={
+            notice.attachment ? notice.attachment : "파일을 업로드해주세요"
+          }
           icon="file-image"
-        /> */}
-
-        {/* <TextField
-          name="url"
-          label="URL"
-          placeholder="URL를 입력해주세요"
-          defaultValue={formData.url}
-          required
-        /> */}
+        />
       </div>
       <div className="flex justify-between ">
         <Link

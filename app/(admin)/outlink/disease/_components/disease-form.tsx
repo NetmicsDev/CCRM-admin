@@ -10,18 +10,31 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function DiseaseForm({
-  disease,
+  disease = DiseaseModel.empty(),
   title,
+  onSubmit = () => {},
 }: {
   disease?: DiseaseModel;
   title: string;
+  onSubmit?: (course: DiseaseModel) => void;
 }) {
-  const [formData, setFormData] = useState<DiseaseModel>(
-    disease ?? DiseaseModel.empty()
-  );
+  const handleSubmit = async (formData: FormData) => {
+    const newDisease = DiseaseModel.empty();
+    // new DiseaseModel(
+    //   disease?.id,
+    //   formData.get("category") as string,
+    //   formData.get("title") as string,
+    //   formData.get("content") as string,
+    //   formData.get("public") as string,
+    //   disease?.createdAt,
+    //   new Date(),
+    //   formData.get("attachment") as string
+    // );
+    onSubmit(newDisease);
+  };
 
   return (
-    <form className="flex flex-col h-full">
+    <form className="flex flex-col h-full" action={handleSubmit}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold">{title}</h2>
       </div>

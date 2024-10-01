@@ -53,17 +53,6 @@ class CourseModel {
     this.attachment = attachment;
   }
 
-  static tableColumns = [
-    { label: "NO.", key: "id" },
-    { label: "제목", key: "title" },
-    { label: "강사명", key: "lecturer" },
-    { label: "카테고리", key: "category" },
-    { label: "업데이트 날짜", key: "updatedAt" },
-    { label: "레이아웃 위치", key: "layoutOrder" },
-    { label: "공개/비공개", key: "isPublished" },
-    { label: "", key: "actions" },
-  ];
-
   // DTO에서 CourseModel로 변환
   static fromJson(courseDTO: CourseDTO): CourseModel {
     return new CourseModel(

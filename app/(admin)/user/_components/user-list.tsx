@@ -42,7 +42,6 @@ const UserListView = () => {
     { label: "연락처", key: "phoneNumber" },
     { label: "가입일", key: "createdAt" },
     { label: "구독 상태", key: "subscriptionStatus" },
-    { label: "결제 정보", key: "info" },
     { label: "", key: "actions" },
   ];
 
