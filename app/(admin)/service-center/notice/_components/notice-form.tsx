@@ -22,7 +22,7 @@ export default function NoticeForm({
       formData.get("category") as keyof typeof NoticeCategory,
       formData.get("title") as string,
       formData.get("content") as string,
-      formData.get("public") === "1",
+      formData.get("public") === "true",
       notice.createdAt,
       new Date(),
       ""
@@ -69,10 +69,10 @@ export default function NoticeForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={notice.isPublished ? 1 : 0}
+            defaultValue={notice.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>

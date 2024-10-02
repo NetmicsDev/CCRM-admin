@@ -29,7 +29,7 @@ export default function TermItem({ term }: { term: TermModel }) {
           title: "보험 약관 삭제",
           description: "보험 약관 삭제 완료!",
         });
-        window.location.reload();
+        router.refresh();
       }
     }
   };
@@ -42,8 +42,18 @@ export default function TermItem({ term }: { term: TermModel }) {
       onDelete={handleDelete}
     >
       <Td>{term.id}</Td>
-      <Td>{term.category}</Td>
-      <Td>{term.insurerName}</Td>
+      <Td>{term.getCategoryName()}</Td>
+      <Td>
+        <div className="flex items-center gap-2">
+          {term.insurerName}
+          <Link href={term.link} target="_blank">
+            <Icon
+              type="external-link"
+              className="w-4 h-4 hover:text-blue-500"
+            />
+          </Link>
+        </div>
+      </Td>
       <Td>{formatDateToKorean(term.updatedAt)}</Td>
     </TableRow>
   );

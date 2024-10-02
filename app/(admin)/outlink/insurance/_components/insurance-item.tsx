@@ -1,9 +1,11 @@
 import TableRow from "@/app/(admin)/_components/table-row";
+import Icon from "@/app/_components/Icon";
 import { Td } from "@/app/_components/Table";
 import InsuranceModel from "@/app/_models/insurance";
 import { deleteInsurance } from "@/app/_services/insurance";
 import { formatDateToKorean } from "@/app/_utils/format";
 import useModalStore from "@/app/_utils/store/modal";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function InsuranceItem({
@@ -44,8 +46,18 @@ export default function InsuranceItem({
       onDelete={handleDelete}
     >
       <Td>{insurance.id}</Td>
-      <Td>{insurance.category}</Td>
-      <Td>{insurance.insurerName}</Td>
+      <Td>{insurance.getCategoryName()}</Td>
+      <Td>
+        <div className="flex items-center gap-2">
+          {insurance.insurerName}
+          <Link href={insurance.link} target="_blank">
+            <Icon
+              type="external-link"
+              className="w-4 h-4 hover:text-blue-500"
+            />
+          </Link>
+        </div>
+      </Td>
       <Td>{formatDateToKorean(insurance.updatedAt)}</Td>
     </TableRow>
   );

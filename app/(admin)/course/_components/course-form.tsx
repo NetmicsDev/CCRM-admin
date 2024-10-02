@@ -24,7 +24,7 @@ export default function CourseForm({
       undefined, // Author는 초기화되지 않음
       course.createdAt,
       new Date(),
-      (formData.get("public") ?? 1) === 1,
+      formData.get("isPublished") === "true",
       parseInt(formData.get("position") as string),
       formData.get("url") as string,
       course.attachment
@@ -83,10 +83,10 @@ export default function CourseForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={course.isPublished ? 1 : 0}
+            defaultValue={course.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>

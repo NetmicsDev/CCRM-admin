@@ -38,7 +38,7 @@ export const InsuranceList: React.FC = () => {
   const columns = [
     { label: "NO.", key: "id" },
     { label: "카테고리", key: "category" },
-    { label: "제목", key: "title" },
+    { label: "회사", key: "title" },
     { label: "업데이트 날짜", key: "updateAt" },
     { label: "", key: "actions" },
   ];
