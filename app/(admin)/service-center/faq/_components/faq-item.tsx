@@ -1,6 +1,6 @@
 import TableRow from "@/app/(admin)/_components/table-row";
 import { Td } from "@/app/_components/Table";
-import FaqModel from "@/app/_models/faq";
+import FaqModel, { FaqCategory } from "@/app/_models/faq";
 import { deleteFaq } from "@/app/_services/faq";
 import { formatDateToKorean } from "@/app/_utils/format";
 import useModalStore from "@/app/_utils/store/modal";
@@ -42,7 +42,7 @@ export default function FaqItem({ faq }: { faq: FaqModel }) {
     >
       <Td>{faq.id}</Td>
       <Td>{faq.title}</Td>
-      <Td>{faq.category + " 관련"}</Td>
+      <Td>{faq.getCategoryName()}</Td>
       <Td>{formatDateToKorean(faq.updatedAt)}</Td>
     </TableRow>
   );

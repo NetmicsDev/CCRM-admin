@@ -31,6 +31,8 @@ const CourseEditInner = () => {
     redirect("/course");
   }
 
+  console.log(course);
+
   const editCourse = async (course: CourseModel) => {
     const { error } = await updateCourse(course);
 

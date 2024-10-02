@@ -2,8 +2,9 @@
 
 import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
+import FileUpload from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import FaqModel from "@/app/_models/faq";
+import FaqModel, { FaqCategory } from "@/app/_models/faq";
 import Link from "next/link";
 
 export default function FaqForm({
@@ -17,15 +18,16 @@ export default function FaqForm({
 }) {
   const handleSubmit = async (formData: FormData) => {
     const newNotice = new FaqModel(
-      faq?.id,
-      formData.get("category") as string,
+      faq.id,
+      formData.get("category") as keyof typeof FaqCategory,
       formData.get("title") as string,
       formData.get("content") as string,
-      formData.get("public") as string,
-      faq?.createdAt,
+      formData.get("public") === "1",
+      faq.createdAt,
       new Date(),
-      formData.get("attachment") as string
+      ""
     );
+    newNotice.newAttachemnt = formData.get("attachment") as File | string;
     onSubmit(newNotice);
   };
 
@@ -78,13 +80,14 @@ export default function FaqForm({
           />
         </div>
 
-        {/* <FileField
-          name="logo-file"
+        <FileUpload
+          name="attachment"
           label="파일 업로드"
-          accept="image/*"
-          placeholder={faq.attachment ? faq.attachment : "파일을 업로드해주세요"}
-          icon="file-image"
-        /> */}
+          icon="file-search"
+          placeholder={
+            faq.attachment ? faq.attachment : "파일을 업로드해주세요"
+          }
+        />
 
         <TextField
           name="url"

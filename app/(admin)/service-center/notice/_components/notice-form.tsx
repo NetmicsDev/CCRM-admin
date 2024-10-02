@@ -4,7 +4,7 @@ import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
 import FileField from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import NoticeModel from "@/app/_models/notice";
+import NoticeModel, { NoticeCategory } from "@/app/_models/notice";
 import Link from "next/link";
 
 export default function NoticeForm({
@@ -18,15 +18,16 @@ export default function NoticeForm({
 }) {
   const handleSubmit = async (formData: FormData) => {
     const newNotice = new NoticeModel(
-      notice?.id,
-      formData.get("category") as string,
+      notice.id,
+      formData.get("category") as keyof typeof NoticeCategory,
       formData.get("title") as string,
       formData.get("content") as string,
-      formData.get("public") as string,
-      notice?.createdAt,
+      formData.get("public") === "1",
+      notice.createdAt,
       new Date(),
-      formData.get("attachment") as string
+      ""
     );
+    newNotice.newAttachemnt = formData.get("attachment") as File | string;
     onSubmit(newNotice);
   };
 
@@ -79,11 +80,10 @@ export default function NoticeForm({
         <FileField
           name="attachment"
           label="파일 업로드"
-          accept="image/*"
+          icon="file-search"
           placeholder={
             notice.attachment ? notice.attachment : "파일을 업로드해주세요"
           }
-          icon="file-image"
         />
       </div>
       <div className="flex justify-between ">

@@ -45,13 +45,7 @@ export default function NoticeItem({ notice }: { notice: NoticeModel }) {
     >
       <Td>{notice.id}</Td>
       <Td>{notice.title}</Td>
-      <Td>
-        {notice.category === "notice"
-          ? "공지사항"
-          : notice.category === "main"
-          ? "메인 상단"
-          : "팝업"}
-      </Td>
+      <Td>{notice.getCategoryName()}</Td>
       <Td>{formatDateToKorean(notice.updatedAt)}</Td>
     </TableRow>
   );

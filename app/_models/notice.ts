@@ -3,28 +3,35 @@ export type NoticeDTO = {
   category: string;
   title: string;
   content: string;
-  isPublished: string;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   attachment: string;
 };
 
+export const NoticeCategory = {
+  notice: "공지사항",
+  main: "메인 상단",
+  popup: "팝업",
+};
+
 export default class NoticeModel {
   id: string;
-  category: string;
+  category: keyof typeof NoticeCategory;
   title: string;
   content: string;
-  isPublished: string;
+  isPublished: boolean;
   createdAt: Date;
   updatedAt: Date;
   attachment: string;
+  newAttachemnt?: File | string;
 
   constructor(
     id: string,
-    category: string,
+    category: keyof typeof NoticeCategory,
     title: string,
     content: string,
-    isPublished: string,
+    isPublished: boolean,
     createdAt: Date,
     updatedAt: Date,
     attachment: string
@@ -39,11 +46,13 @@ export default class NoticeModel {
     this.attachment = attachment;
   }
 
+  getCategoryName = (): string => NoticeCategory[this.category] ?? "기타";
+
   // DTO에서 NoticeModel로 변환
   static fromJson(noticeDTO: NoticeDTO): NoticeModel {
     return new NoticeModel(
       noticeDTO.id,
-      noticeDTO.category,
+      noticeDTO.category as keyof typeof NoticeCategory,
       noticeDTO.title,
       noticeDTO.content,
       noticeDTO.isPublished,
@@ -67,8 +76,30 @@ export default class NoticeModel {
     };
   }
 
+  toFormData(): FormData {
+    const formData = new FormData();
+    formData.append("id", this.id);
+    formData.append("category", this.category);
+    formData.append("title", this.title);
+    formData.append("content", this.content);
+    formData.append("isPublished", String(this.isPublished));
+    if (this.newAttachemnt) {
+      formData.append("attachment", this.newAttachemnt);
+    }
+    return formData;
+  }
+
   // 빈 인스턴스 반환
   static empty(): NoticeModel {
-    return new NoticeModel("", "", "", "", "", new Date(), new Date(), "");
+    return new NoticeModel(
+      "",
+      "notice",
+      "",
+      "",
+      true,
+      new Date(),
+      new Date(),
+      ""
+    );
   }
 }

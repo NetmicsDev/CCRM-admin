@@ -2,7 +2,7 @@
 
 import { Td } from "@/app/_components/Table";
 import TableRow from "@/app/(admin)/_components/table-row";
-import CourseModel from "@/app/_models/course";
+import CourseModel, { CourseCategory } from "@/app/_models/course";
 import { deleteCourse } from "@/app/_services/course";
 import cn from "@/app/_utils/cn";
 import { formatDateToKorean } from "@/app/_utils/format";
@@ -44,7 +44,7 @@ export default function CourseItem({ course }: { course: CourseModel }) {
       <Td>{course.id}</Td>
       <Td>{course.title}</Td>
       <Td>{course.lecturer}</Td>
-      <Td>{course.category}</Td>
+      <Td>{course.getCategoryName()}</Td>
       <Td>{formatDateToKorean(course.updatedAt)}</Td>
       <Td>
         <span
