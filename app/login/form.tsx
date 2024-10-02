@@ -32,9 +32,9 @@ export default function LoginForm() {
 
     if (response.ok) {
       window.location.href = "/dashboard";
+    } else {
+      setError(data.error?.message ?? "Unknown Error");
     }
-
-    setError(data.error?.message ?? "Unknown Error");
   };
 
   return (
