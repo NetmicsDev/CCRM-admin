@@ -32,6 +32,7 @@ export default class TermModel {
     id: string,
     category: keyof typeof TermCategory,
     insurerName: string,
+
     insurerLogo: string,
     link: string,
     createdAt: Date,
