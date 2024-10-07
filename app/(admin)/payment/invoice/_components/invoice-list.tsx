@@ -1,34 +1,40 @@
 "use client";
 
-import React, { useState } from "react";
-import Icon from "@/app/_components/Icon";
-import { Table, Td } from "@/app/_components/Table";
-import cn from "@/app/_utils/cn";
-import Link from "next/link";
-
-// Mock data for invoices
-const invoices = [
-  {
-    id: "EKG464SJFN17",
-    type: "월 후불 구독 10000",
-    name: "김재훈",
-    vat: "87956621",
-    date: "2024년 9월 25일",
-    status: 0,
-    amount: 10000,
-  },
-  {
-    id: "EKG464SJFN18",
-    type: "월 후불 구독 10000",
-    name: "김재훈",
-    vat: "87956621",
-    date: "2024년 9월 25일",
-    status: 1,
-    amount: 10000,
-  },
-];
+import React, { useEffect, useState } from "react";
+import { Table } from "@/app/_components/Table";
+import InvoiceItem from "./invoice-item";
+import { Pagination } from "@/app/_components/Pagination";
+import useModalStore from "@/app/_utils/store/modal";
+import { useSearchParams } from "next/navigation";
+import PageList from "@/app/_models/page-list";
+import PaymentModel from "@/app/_models/payment";
+import { getPayments } from "@/app/_services/payment";
 
 export const InvoiceList: React.FC = () => {
+  const { openAlert } = useModalStore();
+  const searchParams = useSearchParams();
+  const pageNum: number = Number(searchParams.get("page") ?? "1");
+
+  const [invoices, setInvoices] = useState<PageList<PaymentModel>>();
+
+  useEffect(() => {
+    const fetchPayments = async () => {
+      const { data, error } = await getPayments(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setInvoices(data);
+    };
+    fetchPayments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNum]);
+
   const columns = [
     { label: "NO.", key: "id" },
     { label: "결제 유형", key: "type" },
@@ -41,40 +47,16 @@ export const InvoiceList: React.FC = () => {
   ];
 
   return (
-    <Table
-      columns={columns}
-      data={invoices}
-      renderRow={(info) => (
-        <tr key={info.id} className="hover:bg-gray-50">
-          <Td>{info.id}</Td>
-          <Td>{info.type}</Td>
-          <Td>{info.name}</Td>
-          <Td>{info.vat}</Td>
-          <Td>{info.date}</Td>
-          <Td>
-            <span
-              className={cn(
-                "inline-block rounded-full w-1 h-1 p-1 mr-2",
-                info.status ? "bg-green-500" : "bg-yellow-500"
-              )}
-            />
-            {info.status === 0 ? "보류중" : "결제 완료"}
-          </Td>
-          <Td>{info.amount.toLocaleString("ko-KR")}원</Td>
-          <Td className="w-0 space-x-2 items-center">
-            <Link
-              href={`/payment/invoice/${info.id}`}
-              className="inline-flex p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800"
-            >
-              <Icon type="file-search" className="h-5 w-5" />
-            </Link>
-            <button className="p-2 rounded hover:bg-gray-200 text-gray-600 hover:text-gray-800">
-              <Icon type="more-vertical" className="h-5 w-5" />
-            </button>
-          </Td>
-        </tr>
-      )}
-    />
+    <>
+      <div className="block flex-1 overflow-auto">
+        <Table
+          columns={columns}
+          data={invoices?.data ?? []}
+          renderRow={(info) => <InvoiceItem key={info.id} invoice={info} />}
+        />
+      </div>
+      <Pagination totalCount={invoices?.total ?? 0} currentPage={pageNum} />
+    </>
   );
 };
 

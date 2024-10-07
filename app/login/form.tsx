@@ -1,46 +1,50 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { TextField } from "../_components/Input";
 import Icon from "../_components/Icon";
+import { flushSync } from "react-dom";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-
-    if (!email || !password) {
-      setError("이메일과 비밀번호를 모두 입력해주세요.");
-      return;
+  useEffect(() => {
+    if (loading && error !== "") {
+      setError("");
     }
+  }, [loading, error]);
 
-    try {
-      // Here you would typically make an API call to authenticate
-      // For demonstration, we'll just simulate a successful login
-      console.log("Logging in with:", email, password);
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-      router.push("/dashboard");
-    } catch (err) {
-      setError("로그인에 실패했습니다. 다시 시도해주세요.");
+  const handleSubmit = async (formData: FormData) => {
+    const username = formData.get("username") as string;
+    const password = formData.get("password") as string;
+
+    flushSync(() => setLoading(true));
+    const response = await fetch("/api/sign-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
+    });
+    const data = await response.json();
+    setLoading(false);
+
+    if (response.ok) {
+      window.location.href = "/dashboard";
+    } else {
+      setError(data.error?.message ?? "Unknown Error");
     }
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
+    <form className="space-y-4" action={handleSubmit}>
       <TextField
-        label="이메일 주소"
-        name="email"
-        type="email"
+        label="아이디"
+        name="username"
+        type="username"
         autoComplete="email"
         required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
       />
 
       <TextField
@@ -49,8 +53,6 @@ export default function LoginForm() {
         type={showPassword ? "text" : "password"}
         autoComplete="current-password"
         required
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
         trailingIcon={
           <Icon
             type={showPassword ? "eye-off" : "eye"}
@@ -59,11 +61,13 @@ export default function LoginForm() {
           />
         }
       />
+      {error && <p className="mt-2 text-sm text-red-500">{error}</p>}
 
       <div className="pt-4">
         <button
           type="submit"
-          className="w-full flex justify-center py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none focus:bg-gray-900"
+          className="w-full flex justify-center py-3 border border-transparent rounded-md shadow-sm font-medium text-white bg-gray-700 hover:bg-gray-800 focus:outline-none disabled:bg-gray-400 disabled:pointer-events-none"
+          disabled={loading}
         >
           로그인
         </button>

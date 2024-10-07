@@ -1,10 +1,11 @@
 import { NavItem } from "./NavItem";
 import Image from "next/image";
 import NavGroup from "./NavGroup";
+import SignoutButton from "./sign-out-button";
 
 export default function Sidebar() {
   return (
-    <aside className="print:hidden w-64 bg-white border-r h-screen p-4">
+    <aside className="print:hidden flex flex-col w-64 bg-white border-r h-screen p-4">
       <div className="flex items-center mb-4 p-2">
         <Image
           src="/images/logo.svg"
@@ -14,7 +15,7 @@ export default function Sidebar() {
           style={{ height: "auto" }}
         />
       </div>
-      <nav>
+      <nav className="flex-1 overflow-y-scroll">
         <ul className="space-y-2">
           <li>
             <NavItem
@@ -43,18 +44,31 @@ export default function Sidebar() {
                   href: "/service-center/faq",
                   title: "FAQ",
                 },
-                {
-                  href: "/service-center/inquiry",
-                  title: "1:1 문의",
-                },
+                // {
+                //   href: "/service-center/inquiry",
+                //   title: "1:1 문의",
+                // },
               ]}
             />
           </li>
           <li>
-            <NavItem
-              href="/outlink"
+            <NavGroup
               title="청구/약관 링크 관리"
               icon="file-symlink"
+              items={[
+                {
+                  href: "/outlink/insurance",
+                  title: "보험 청구",
+                },
+                {
+                  href: "/outlink/term",
+                  title: "보험 약관",
+                },
+                {
+                  href: "/outlink/disease",
+                  title: "질병 코드",
+                },
+              ]}
             />
           </li>
         </ul>
@@ -72,15 +86,12 @@ export default function Sidebar() {
                   href: "/payment/invoice",
                   title: "인보이스",
                 },
-                {
-                  href: "/payment/info",
-                  title: "결제 정보",
-                },
               ]}
             />
           </li>
         </ul>
       </nav>
+      <SignoutButton />
     </aside>
   );
 }

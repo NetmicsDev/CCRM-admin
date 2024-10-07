@@ -1,7 +1,7 @@
-import { Pagination } from "@/app/_components/Pagination";
 import { CourseList } from "./_components/course-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
+import { Suspense } from "react";
 
 export default function CoursePage() {
   return (
@@ -15,10 +15,9 @@ export default function CoursePage() {
           <Icon type="plus" className="w-4 h-4 mr-1" /> 강의 추가하기
         </Link>
       </div>
-      <div className="block flex-1 overflow-auto">
+      <Suspense fallback={<div></div>}>
         <CourseList />
-      </div>
-      <Pagination />
+      </Suspense>
     </div>
   );
 }

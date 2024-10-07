@@ -1,41 +1,38 @@
 "use client";
 
-import Icon from "@/app/_components/Icon";
 import { TextField } from "@/app/_components/Input";
 import TextAreaField from "@/app/_components/Input/area-field";
-import FileField from "@/app/_components/Input/file-field";
+import FileUpload from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Faq from "@/app/_types/faq";
+import FaqModel, { FaqCategory } from "@/app/_models/faq";
 import Link from "next/link";
-import { useState } from "react";
 
-export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
-  const [formData, setFormData] = useState<Faq>(
-    faq ?? {
-      id: "",
-      title: "",
-      content: "",
-      category: "결제",
-      public: true,
-      file: "",
-      url: "",
-      updateDate: new Date().toISOString().split("T")[0],
-    }
-  );
-
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+export default function FaqForm({
+  faq = FaqModel.empty(),
+  title,
+  onSubmit = () => {},
+}: {
+  faq?: FaqModel;
+  title: string;
+  onSubmit?: (course: FaqModel) => void;
+}) {
+  const handleSubmit = async (formData: FormData) => {
+    const newNotice = new FaqModel(
+      faq.id,
+      formData.get("category") as keyof typeof FaqCategory,
+      formData.get("title") as string,
+      formData.get("content") as string,
+      formData.get("public") === "true",
+      faq.createdAt,
+      new Date(),
+      ""
+    );
+    newNotice.newAttachemnt = formData.get("attachment") as File | string;
+    onSubmit(newNotice);
   };
 
   return (
-    <form className="flex flex-col h-full">
+    <form className="flex flex-col h-full" action={handleSubmit}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
       </div>
@@ -45,7 +42,7 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           name="title"
           label="제목"
           placeholder="제목을 작성해주세요"
-          value={formData.title}
+          value={faq.title}
           required
         />
 
@@ -53,8 +50,7 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           name="content"
           label="내용"
           placeholder="내용을 작성해주세요"
-          value={formData.content}
-          onChange={handleChange}
+          value={faq.content}
           className="h-24"
           required
         />
@@ -63,7 +59,7 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           <SelectField
             name="category"
             label="카테고리"
-            defaultValue={formData.category}
+            defaultValue={faq.category}
             options={[
               { text: "결제 관련", value: "결제" },
               { text: "회원 관련", value: "회원" },
@@ -76,27 +72,28 @@ export default function FaqForm({ faq, title }: { faq?: Faq; title: string }) {
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.public ? 1 : 0}
+            defaultValue={faq.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>
 
-        <FileField
-          name="logo-file"
+        <FileUpload
+          name="attachment"
           label="파일 업로드"
-          accept="image/*"
-          placeholder={formData.file ? formData.file : "파일을 업로드해주세요"}
-          icon="file-image"
+          icon="file-search"
+          placeholder={
+            faq.attachment ? faq.attachment : "파일을 업로드해주세요"
+          }
         />
 
         <TextField
           name="url"
           label="URL"
           placeholder="URL를 입력해주세요"
-          defaultValue={formData.url}
+          defaultValue={faq.attachment}
           required
         />
       </div>

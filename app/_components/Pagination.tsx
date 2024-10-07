@@ -1,6 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Icon from "./Icon";
 import cn from "../_utils/cn";
@@ -8,39 +7,21 @@ import cn from "../_utils/cn";
 interface PaginationProps {
   totalCount?: number;
   itemsPerPage?: number;
+  currentPage?: number;
 }
 export function Pagination({
-  totalCount = 100,
+  totalCount = 10,
   itemsPerPage = 10,
+  currentPage = 1,
 }: PaginationProps) {
-  return (
-    <div
-      className="flex w-full justify-between items-center pt-4 gap-2"
-      aria-label="Pagination"
-    >
-      <Suspense fallback={<div></div>}>
-        <PaginationContent
-          totalCount={totalCount}
-          itemsPerPage={itemsPerPage}
-        />
-      </Suspense>
-    </div>
-  );
-}
-export const PaginationContent: React.FC<PaginationProps> = ({
-  totalCount = 100,
-  itemsPerPage = 10,
-}) => {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get("page")) || 1;
   const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   const getPageNumbers = () => {
     const pageNumbers = [];
     const maxPages = 10;
     let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
-    let endPage = Math.min(totalPages, startPage + maxPages - 1);
+    const endPage = Math.min(totalPages, startPage + maxPages - 1);
 
     if (endPage - startPage + 1 < maxPages) {
       startPage = Math.max(1, endPage - maxPages + 1);
@@ -54,24 +35,34 @@ export const PaginationContent: React.FC<PaginationProps> = ({
   };
 
   const createPageUrl = (page: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    return `${pathname}?${params.toString()}`;
+    return `${pathname}?page=${page}`;
   };
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, totalCount);
 
   return (
-    <>
+    <div
+      className="flex w-full justify-between items-center pt-4 gap-2"
+      aria-label="Pagination"
+    >
       <div className="hidden sm:block">
         <p className="text-sm text-gray-700">
           {totalCount}개 항목 중{" "}
-          <span className="font-medium">{startItem}</span> -{" "}
+          {totalCount !== 0 && (
+            <>
+              <span className="font-medium">{startItem}</span> -{" "}
+            </>
+          )}
           <span className="font-medium">{endItem}</span>개 항목 표시
         </p>
       </div>
-      <div className="flex flex-1 justify-between sm:justify-end">
+      <div
+        className={cn(
+          "flex flex-1 justify-between sm:justify-end",
+          totalCount === 0 && "hidden"
+        )}
+      >
         <Link
           href={createPageUrl(currentPage - 1)}
           className={cn(
@@ -111,6 +102,6 @@ export const PaginationContent: React.FC<PaginationProps> = ({
           <Icon type="chevron-right" className="w-6 h-6 " />
         </Link>
       </div>
-    </>
+    </div>
   );
-};
+}

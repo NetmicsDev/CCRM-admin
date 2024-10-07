@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, ReactNode } from "react";
 import Icon, { IconType } from "./Icon";
 import cn from "../_utils/cn";
 
-interface DropdownOption {
+export interface DropdownOption {
   label: string;
   icon?: IconType;
   color?: string; // Icon component to display (optional)
@@ -48,13 +48,13 @@ const Dropdown: React.FC<DropdownProps> = ({ options, children }) => {
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 max-w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-          <div className="py-1">
+        <div className="origin-top-right absolute right-0 max-w-52 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+          <div className="p-2">
             {options.map((option, index) => (
               <button
                 key={index}
                 className={cn(
-                  "group flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full",
+                  "group flex items-center pl-2 pr-3 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full",
                   option.color && `text-${option.color}`
                 )}
                 onClick={() => {
@@ -66,7 +66,7 @@ const Dropdown: React.FC<DropdownProps> = ({ options, children }) => {
                   <Icon
                     type={option.icon}
                     className={cn(
-                      "w-4 h-4 mr-3 text-gray-700 group-hover:bg-gray-100",
+                      "w-4 h-4 mr-2  text-gray-700 group-hover:bg-gray-100",
                       option.color && `text-${option.color}`
                     )}
                   />

@@ -1,44 +1,98 @@
 "use client";
 
 import Icon from "@/app/_components/Icon";
-import { Download, Printer } from "lucide-react";
+import PaymentModel from "@/app/_models/payment";
+import { getPayment } from "@/app/_services/payment";
+import { formatDateToKoreanWithTime } from "@/app/_utils/format";
+import useModalStore from "@/app/_utils/store/modal";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export default function InvoiceDetailPage() {
+export default function InvoiceDetailPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams?: { method: string };
+}) {
+  const router = useRouter();
+  const { openAlert } = useModalStore();
+
+  const { id } = params;
+
+  const [invoice, setInvoice] = useState<PaymentModel>();
+
+  useEffect(() => {
+    if (id) {
+      const fetchInvoice = async () => {
+        const { data, error } = await getPayment(params.id);
+
+        if (error) {
+          await openAlert({
+            title: "서버 오류",
+            description: error.message,
+          });
+          return;
+        }
+        setInvoice(data);
+      };
+      fetchInvoice();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  useEffect(() => {
+    if (invoice && searchParams?.method === "print") {
+      window.print();
+      searchParams.method = "";
+    }
+  }, [invoice, searchParams]);
+
   return (
     <div id="invoice-detail" className="px-4 overflow-auto h-full">
       <div className="flex justify-between items-center py-2 sticky top-0 bg-white">
         <h1 className="text-3xl font-bold">CCRM</h1>
-        <div className="print:hidden">
+        <div className="flex gap-2 print:hidden">
           <button
-            className="flex items-center px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 font-medium text-sm"
+            className="flex items-center pl-3 pr-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 font-medium text-sm"
             onClick={() => window.print()}
           >
             <Icon type="printer" className="inline-flex w-4 h-4 mr-2" />
             다운로드 및 프린트
           </button>
+          <button
+            className="flex items-center pl-3 pr-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 font-medium text-sm"
+            onClick={() => router.back()}
+          >
+            <Icon type="close" className="inline-flex w-4 h-4 mr-2" />
+            닫기
+          </button>
         </div>
       </div>
 
       <p className="text-gray-600 my-6">
-        안녕하세요 정은우님,
+        안녕하세요 {invoice?.buyerName || "-"}님,
         <br />
-        이것은 당신이 월 후불 구독 10000에 지불한 10,000₩에 대한 영수증입니다.
+        이것은 당신이 {invoice?.goodsName || "-"}에 지불한 {invoice?.amt || 0}
+        원에 대한 영수증입니다.
       </p>
 
       <div className="flex justify-between mb-8">
         <div>
           <h2 className="text-lg font-semibold mb-2">결제 고유 번호</h2>
-          <p className="text-3xl font-bold">741037024</p>
+          <p className="text-3xl font-bold">{invoice?.billKey || "-"}</p>
         </div>
         <div className="text-right">
           <h2 className="text-lg font-semibold mb-2">결제일</h2>
-          <p className="text-xl">2024년 9월 25일 03:45 pm</p>
+          <p className="text-xl">
+            {formatDateToKoreanWithTime(invoice?.payExpDate ?? new Date())}
+          </p>
         </div>
       </div>
 
       <div className="flex justify-between mb-8">
         <div>
-          <h2 className="text-lg font-semibold mb-2">(주)비가치네트워크</h2>
+          <h2 className="text-lg font-semibold mb-2">(주)비가자네트워크</h2>
           <p>서울시 강남구 테헤란로20길</p>
           <p>27 동방빌딩</p>
           <p>사업자등록번호</p>
@@ -69,23 +123,23 @@ export default function InvoiceDetailPage() {
         <tbody>
           <tr className="border-b">
             <td className="py-2">
-              <p className="font-semibold">월 후불 구독 10000</p>
-              <p className="text-sm text-gray-600">교육 콘텐츠 구독</p>
+              <p className="font-semibold">{invoice?.goodsName ?? "-"}</p>
+              <p className="text-sm text-gray-600">뭐가 들어가야 할까</p>
             </td>
             <td className="text-right py-2">1</td>
-            <td className="text-right py-2">10,000₩</td>
-            <td className="text-right py-2">10,000₩</td>
+            <td className="text-right py-2">{invoice?.amt ?? 0}원</td>
+            <td className="text-right py-2">
+              {1 * Number.parseFloat(invoice?.amt ?? "0")}원
+            </td>
           </tr>
           <tr className="border-b">
             <td className="py-2">
-              <p className="font-semibold">Logo Creation</p>
-              <p className="text-sm text-gray-600">
-                Logo and business cards design
-              </p>
+              <p className="font-semibold">부가세</p>
+              <p className="text-sm text-gray-600">부가세</p>
             </td>
-            <td className="text-right py-2">1</td>
-            <td className="text-right py-2">0₩</td>
-            <td className="text-right py-2">0₩</td>
+            <td className="text-right py-2"></td>
+            <td className="text-right py-2">0원</td>
+            <td className="text-right py-2">0원</td>
           </tr>
         </tbody>
       </table>
@@ -95,19 +149,23 @@ export default function InvoiceDetailPage() {
           <tbody>
             <tr>
               <td className="text-right py-2">Sub-Total</td>
-              <td className="text-right py-2 font-semibold">10,000₩</td>
+              <td className="text-right py-2 font-semibold">
+                {invoice?.amt ?? 0}원
+              </td>
             </tr>
             <tr>
               <td className="text-right py-2">Vat Rate</td>
-              <td className="text-right py-2 font-semibold">10,000₩</td>
+              <td className="text-right py-2 font-semibold">{0}%</td>
             </tr>
             <tr>
               <td className="text-right py-2">Vat Due</td>
-              <td className="text-right py-2 font-semibold">10,000₩</td>
+              <td className="text-right py-2 font-semibold">{0}원</td>
             </tr>
             <tr className="border-t">
               <td className="text-right py-2 font-bold">TOTAL DUE</td>
-              <td className="text-right py-2 font-bold">10,000₩</td>
+              <td className="text-right py-2 font-bold">
+                {invoice?.amt ?? 0}원
+              </td>
             </tr>
           </tbody>
         </table>

@@ -1,42 +1,43 @@
 "use client";
 
 import { TextField } from "@/app/_components/Input";
+import FileUpload from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import Course from "@/app/_types/course";
+import CourseModel, { CourseCategory } from "@/app/_models/course";
 import Link from "next/link";
-import { useState } from "react";
 
 export default function CourseForm({
-  course,
+  course = CourseModel.empty(),
   title,
+  onSubmit = () => {},
 }: {
-  course?: Course;
+  course?: CourseModel;
   title: string;
+  onSubmit?: (course: CourseModel) => void;
 }) {
-  const [formData, setFormData] = useState<Course>(
-    course ?? {
-      id: "",
-      title: "",
-      instructor: "",
-      category: "재테크/투자",
-      public: false,
-      updateDate: new Date().toISOString().split("T")[0],
-      url: "",
-      position: [],
-    }
-  );
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleSubmit = (formData: FormData) => {
+    const newCourse = new CourseModel(
+      course.id,
+      formData.get("title") as string,
+      formData.get("lecturer") as string,
+      formData.get("category") as keyof typeof CourseCategory,
+      undefined, // Author는 초기화되지 않음
+      course.createdAt,
+      new Date(),
+      formData.get("isPublished") === "true",
+      parseInt(formData.get("position") as string),
+      formData.get("url") as string,
+      course.attachment
+    );
+    newCourse.newAttachemnt = formData.get("attachment") as
+      | File
+      | string
+      | undefined;
+    onSubmit(newCourse);
   };
 
   return (
-    <form className="flex flex-col h-full">
+    <form className="flex flex-col h-full" action={handleSubmit}>
       <div className="flex justify-between items-center">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
       </div>
@@ -46,26 +47,26 @@ export default function CourseForm({
           name="title"
           label="강의 제목"
           placeholder="제목을 작성해주세요"
-          value={formData.title}
+          defaultValue={course.title}
           required
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <TextField
-            name="instructor"
+            name="lecturer"
             label="강사명"
             placeholder="강사명을 입력해주세요"
-            value={formData.instructor}
+            defaultValue={course.lecturer}
             required
           />
           <SelectField
             name="category"
             label="카테고리"
-            defaultValue={formData.category}
-            options={[
-              { text: "재테크/투자", value: "재테크/투자" },
-              { text: "기타", value: "기타" },
-            ]}
+            defaultValue={course.category}
+            options={Object.entries(CourseCategory).map(([key, value]) => ({
+              text: value,
+              value: key,
+            }))}
           />
         </div>
 
@@ -75,17 +76,17 @@ export default function CourseForm({
             label="업로드 날짜"
             type="date"
             defaultValue={
-              new Date(formData.updateDate).toISOString().split("T")[0]
+              new Date(course.updatedAt).toISOString().split("T")[0]
             }
             required
           />
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={formData.public ? 1 : 0}
+            defaultValue={course.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>
@@ -94,16 +95,27 @@ export default function CourseForm({
           name="url"
           label="URL"
           placeholder="URL를 입력해주세요"
-          defaultValue={formData.url}
+          defaultValue={course.url}
           required
         />
 
-        <TextField
-          name="position"
-          label="레이아웃 위치 설정"
-          placeholder="숫자(,)로 작성해주세요"
-          defaultValue={formData.position.join(",")}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FileUpload
+            name="attachment"
+            label="썸네일 업로드"
+            icon="file-image"
+            accept="image/*"
+            placeholder={course.attachment || "썸네일을 업로드해주세요"}
+          />
+
+          <TextField
+            type="number"
+            name="position"
+            label="레이아웃 위치 설정"
+            placeholder="위치(숫자)를 입력해주세요"
+            defaultValue={course.layoutOrder}
+          />
+        </div>
       </div>
       <div className="flex justify-between ">
         <Link

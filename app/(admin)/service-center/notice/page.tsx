@@ -1,7 +1,7 @@
-import { Pagination } from "@/app/_components/Pagination";
 import { NoticeList } from "./_components/notice-list";
 import Link from "next/link";
 import Icon from "@/app/_components/Icon";
+import { Suspense } from "react";
 
 export default function NoticePage() {
   return (
@@ -16,10 +16,9 @@ export default function NoticePage() {
           공지사항 추가하기
         </Link>
       </div>
-      <div className="block flex-1 overflow-auto">
+      <Suspense fallback={<div></div>}>
         <NoticeList />
-      </div>
-      <Pagination />
+      </Suspense>
     </div>
   );
 }

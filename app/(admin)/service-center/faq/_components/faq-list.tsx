@@ -1,57 +1,59 @@
 "use client";
 
-import React, { useState } from "react";
-import Icon from "@/app/_components/Icon";
-import { Table, Td } from "@/app/_components/Table";
+import React, { useEffect, useState } from "react";
+import { Table } from "@/app/_components/Table";
 import FaqItem from "./faq-item";
-
-// Mock data for faqs
-const faqs = [
-  {
-    id: "EKG464SJFN17",
-    title: "회원가입은 어떻게 하나요?",
-    content: "어쩌구저쩌구",
-    category: "가입",
-    updateDate: "2024년 9월 25일",
-  },
-  {
-    id: "EKG464SJFN18",
-    title: "회원가입은 어떻게 하나요?",
-    content: "어쩌구저쩌구",
-    category: "결제",
-    updateDate: "2024년 9월 25일",
-  },
-  {
-    id: "EKG464SJFN19",
-    title: "회원가입은 어떻게 하나요?",
-    content: "어쩌구저쩌구",
-    category: "연동",
-    updateDate: "2024년 9월 25일",
-  },
-  {
-    id: "EKG464SJFN20",
-    title: "회원가입은 어떻게 하나요?",
-    content: "어쩌구저쩌구",
-    category: "프로그램",
-    updateDate: "2024년 9월 25일",
-  },
-];
+import { useSearchParams } from "next/navigation";
+import PageList from "@/app/_models/page-list";
+import { getFaqs } from "@/app/_services/faq";
+import { Pagination } from "@/app/_components/Pagination";
+import FaqModel from "@/app/_models/faq";
+import useModalStore from "@/app/_utils/store/modal";
 
 export const FaqList: React.FC = () => {
+  const { openAlert } = useModalStore();
+  const searchParams = useSearchParams();
+  const pageNum: number = Number(searchParams.get("page") ?? "1");
+
+  const [faqList, setFaqList] = useState<PageList<FaqModel>>();
+
+  useEffect(() => {
+    const fetchFaqs = async () => {
+      const { data, error } = await getFaqs(pageNum);
+
+      if (error) {
+        openAlert({
+          title: "서버 오류",
+          description: error.message,
+        });
+        return;
+      }
+
+      setFaqList(data);
+    };
+    fetchFaqs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNum]);
+
   const columns = [
     { label: "NO.", key: "id" },
     { label: "FAQ", key: "title" },
     { label: "카테고리", key: "category" },
-    { label: "업데이트 날짜", key: "updateDate" },
+    { label: "업데이트 날짜", key: "updateAt" },
     { label: "", key: "actions" },
   ];
 
   return (
-    <Table
-      columns={columns}
-      data={faqs}
-      renderRow={(faq) => <FaqItem key={faq.id} faq={faq} />}
-    />
+    <>
+      <div className="block flex-1 overflow-auto">
+        <Table
+          columns={columns}
+          data={faqList?.data ?? []}
+          renderRow={(faq) => <FaqItem key={faq.id} faq={faq} />}
+        />
+      </div>
+      <Pagination totalCount={faqList?.total ?? 0} currentPage={pageNum} />
+    </>
   );
 };
 
