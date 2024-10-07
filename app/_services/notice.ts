@@ -31,7 +31,8 @@ export async function getNotices(
 export async function addNotice(notice: NoticeModel) {
   const { data, error } = await apiRequest<NoticeDTO>(endpoint, {
     method: "POST",
-    data: notice.toJson(),
+    headers: { "Content-Type": "multipart/form-data" },
+    data: notice.toFormData(),
   });
 
   if (error) {
@@ -46,7 +47,8 @@ export async function updateNotice(notice: NoticeModel) {
     `${endpoint}/${notice.id}`,
     {
       method: "PUT",
-      data: notice.toJson(),
+      headers: { "Content-Type": "multipart/form-data" },
+      data: notice.toFormData(),
     }
   );
 

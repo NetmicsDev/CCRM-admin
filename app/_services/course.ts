@@ -31,7 +31,8 @@ export async function getCourses(
 export async function addCourse(course: CourseModel) {
   const { data, error } = await apiRequest<CourseDTO>(endpoint, {
     method: "POST",
-    data: course.toJson(),
+    headers: { "Content-Type": "multipart/form-data" },
+    data: course.toFormData(),
   });
 
   if (error) {
@@ -44,7 +45,11 @@ export async function addCourse(course: CourseModel) {
 export async function updateCourse(course: CourseModel) {
   const { data, error } = await apiRequest<CourseDTO>(
     `${endpoint}/${course.id}`,
-    { method: "PUT", data: course.toJson() }
+    {
+      method: "PUT",
+      headers: { "Content-Type": "multipart/form-data" },
+      data: course.toFormData(),
+    }
   );
 
   if (error) {

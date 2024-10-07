@@ -31,7 +31,8 @@ export async function getFaqs(
 export async function addFaq(faq: FaqModel) {
   const { data, error } = await apiRequest<FaqDTO>(endpoint, {
     method: "POST",
-    data: faq.toJson(),
+    headers: { "Content-Type": "multipart/form-data" },
+    data: faq.toFormData(),
   });
 
   if (error) {
@@ -44,7 +45,8 @@ export async function addFaq(faq: FaqModel) {
 export async function updateFaq(faq: FaqModel) {
   const { data, error } = await apiRequest<FaqDTO>(`${endpoint}/${faq.id}`, {
     method: "PUT",
-    data: faq.toJson(),
+    headers: { "Content-Type": "multipart/form-data" },
+    data: faq.toFormData(),
   });
 
   if (error) {

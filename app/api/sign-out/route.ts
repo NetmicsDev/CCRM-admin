@@ -2,11 +2,11 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function POST(request: Request) {
   try {
     cookies().delete("token");
     revalidatePath("/");
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.json({ message: "Sign out success" }, { status: 200 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json(

@@ -4,49 +4,52 @@ export type InsuranceDTO = {
   id: string;
   category: string;
   insurerName: string;
-  lecturer: string;
   insurerLogo: string;
   link: string;
   virtualFaxNumber: string;
   groupInsurance: string;
   createdAt: string;
   updatedAt: string;
-  isPublished: string;
-  orderNum: string;
+  isPublished: boolean;
+  orderNum: number;
+};
+
+export const InsuranceCategory = {
+  property: "손해보험",
+  life: "생명보험",
+  pet: "펫보험",
+  liability: "배상책임",
 };
 
 export default class InsuranceModel {
   id: string;
-  category: string;
+  category: keyof typeof InsuranceCategory;
   insurerName: string;
-  lecturer: string;
   insurerLogo: string;
   link: string;
   virtualFaxNumber: string;
   groupInsurance: string;
   createdAt: Date;
   updatedAt: Date;
-  isPublished: string;
-  orderNum: string;
+  isPublished: boolean;
+  orderNum: number;
 
   constructor(
     id: string,
-    category: string,
+    category: keyof typeof InsuranceCategory,
     insurerName: string,
-    lecturer: string,
     insurerLogo: string,
     link: string,
     virtualFaxNumber: string,
     groupInsurance: string,
     createdAt: Date,
     updatedAt: Date,
-    isPublished: string,
-    orderNum: string
+    isPublished: boolean,
+    orderNum: number
   ) {
     this.id = id;
     this.category = category;
     this.insurerName = insurerName;
-    this.lecturer = lecturer;
     this.insurerLogo = insurerLogo;
     this.link = link;
     this.virtualFaxNumber = virtualFaxNumber;
@@ -57,12 +60,14 @@ export default class InsuranceModel {
     this.orderNum = orderNum;
   }
 
+  getCategoryName = (): string =>
+    InsuranceCategory[this.category] ?? "손해보험";
+
   static fromJson(dto: InsuranceDTO): InsuranceModel {
     return new InsuranceModel(
       dto.id,
-      dto.category,
+      dto.category as keyof typeof InsuranceCategory,
       dto.insurerName,
-      dto.lecturer,
       dto.insurerLogo,
       dto.link,
       dto.virtualFaxNumber,
@@ -79,7 +84,6 @@ export default class InsuranceModel {
       id: this.id,
       category: this.category,
       insurerName: this.insurerName,
-      lecturer: this.lecturer,
       insurerLogo: this.insurerLogo,
       link: this.link,
       virtualFaxNumber: this.virtualFaxNumber,
@@ -94,8 +98,7 @@ export default class InsuranceModel {
   static empty(): InsuranceModel {
     return new InsuranceModel(
       "",
-      "",
-      "",
+      "property",
       "",
       "",
       "",
@@ -103,8 +106,8 @@ export default class InsuranceModel {
       "",
       new Date(),
       new Date(),
-      "",
-      ""
+      true,
+      1,
     );
   }
 }

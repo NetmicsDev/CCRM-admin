@@ -1,7 +1,8 @@
 "use client";
 
 import SelectField from "@/app/_components/Input/select-field";
-import TermModel from "@/app/_models/term";
+import TextField from "@/app/_components/Input/text-field";
+import TermModel, { TermCategory } from "@/app/_models/term";
 import Link from "next/link";
 
 export default function TermForm({
@@ -14,17 +15,17 @@ export default function TermForm({
   onSubmit?: (course: TermModel) => void;
 }) {
   const handleSubmit = async (formData: FormData) => {
-    const newTerm = TermModel.empty();
-    // new TermModel(
-    //   term?.id,
-    //   formData.get("category") as string,
-    //   formData.get("title") as string,
-    //   formData.get("content") as string,
-    //   formData.get("public") as string,
-    //   term?.createdAt,
-    //   new Date(),
-    //   formData.get("attachment") as string
-    // );
+    const newTerm = new TermModel(
+      term?.id,
+      formData.get("category") as keyof typeof TermCategory,
+      formData.get("insurerName") as string,
+      formData.get("insurerLogo") as string,
+      formData.get("link") as string,
+      term?.createdAt,
+      new Date(),
+      formData.get("public") === "true",
+      ""
+    );
     onSubmit(newTerm);
   };
 
@@ -35,60 +36,50 @@ export default function TermForm({
       </div>
 
       <div className="flex flex-col flex-1 space-y-4">
-        {/* <TextField
-          name="title"
-          label="제목"
-          placeholder="제목을 작성해주세요"
-          value={term.title}
-          required
-        />
-
-        <TextAreaField
-          name="content"
-          label="내용"
-          placeholder="내용을 작성해주세요"
-          value={term.content}
-          className="h-60"
-          required
-        /> */}
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectField
             name="category"
             label="카테고리"
             defaultValue={term.category}
-            options={[
-              { text: "공지사항", value: "term" },
-              { text: "메인상단", value: "main" },
-              { text: "팝업", value: "popup" },
-            ]}
+            options={Object.entries(TermCategory).map(([key, value]) => ({
+              text: value,
+              value: key,
+            }))}
           />
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={term.isPublished ? 1 : 0}
+            defaultValue={term.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>
 
-        {/* <FileField
-          name="logo-file"
-          label="파일 업로드"
-          accept="image/*"
-          placeholder={term.logo ? term.logo : "파일을 업로드해주세요"}
-          icon="file-image"
-        /> */}
-
-        {/* <TextField
-          name="url"
-          label="URL"
-          placeholder="URL를 입력해주세요"
-          defaultValue={term.url}
+        <TextField
+          name="insurerName"
+          label="회사명"
+          placeholder="회사명을 작성해주세요"
+          defaultValue={term.insurerName}
           required
-        /> */}
+        />
+
+        <TextField
+          name="insurerLogo"
+          label="회사 로고 링크"
+          placeholder="회사 로고 링크를 입력해주세요"
+          defaultValue={term.insurerLogo}
+          required
+        />
+
+        <TextField
+          name="link"
+          label="약관 URL"
+          placeholder="약관 URL를 입력해주세요"
+          defaultValue={term.link}
+          required
+        />
       </div>
       <div className="flex justify-between ">
         <Link

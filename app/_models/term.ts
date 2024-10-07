@@ -4,43 +4,45 @@ export type TermDTO = {
   id: string;
   category: string;
   insurerName: string;
-  lecturer: string;
   insurerLogo: string;
   link: string;
   createdAt: string;
   updatedAt: string;
-  isPublished: string;
+  isPublished: boolean;
   orderNum: string;
+};
+
+export const TermCategory = {
+  property: "손해보험",
+  life: "생명보험",
 };
 
 export default class TermModel {
   id: string;
-  category: string;
+  category: keyof typeof TermCategory;
   insurerName: string;
-  lecturer: string;
   insurerLogo: string;
   link: string;
   createdAt: Date;
   updatedAt: Date;
-  isPublished: string;
+  isPublished: boolean;
   orderNum: string;
 
   constructor(
     id: string,
-    category: string,
+    category: keyof typeof TermCategory,
     insurerName: string,
-    lecturer: string,
+
     insurerLogo: string,
     link: string,
     createdAt: Date,
     updatedAt: Date,
-    isPublished: string,
+    isPublished: boolean,
     orderNum: string
   ) {
     this.id = id;
     this.category = category;
     this.insurerName = insurerName;
-    this.lecturer = lecturer;
     this.insurerLogo = insurerLogo;
     this.link = link;
     this.createdAt = createdAt;
@@ -49,18 +51,19 @@ export default class TermModel {
     this.orderNum = orderNum;
   }
 
-  static fromJson(dto: TermDTO): TermModel {
+  getCategoryName = (): string => TermCategory[this.category] ?? "손해보험";
+
+  static fromJson(term: TermDTO): TermModel {
     return new TermModel(
-      dto.id,
-      dto.category,
-      dto.insurerName,
-      dto.lecturer,
-      dto.insurerLogo,
-      dto.link,
-      new Date(dto.createdAt),
-      new Date(dto.updatedAt),
-      dto.isPublished,
-      dto.orderNum
+      term.id,
+      term.category as keyof typeof TermCategory,
+      term.insurerName,
+      term.insurerLogo,
+      term.link,
+      new Date(term.createdAt),
+      new Date(term.updatedAt),
+      term.isPublished,
+      term.orderNum
     );
   }
 
@@ -69,7 +72,6 @@ export default class TermModel {
       id: this.id,
       category: this.category,
       insurerName: this.insurerName,
-      lecturer: this.lecturer,
       insurerLogo: this.insurerLogo,
       link: this.link,
       createdAt: this.createdAt.toISOString(),
@@ -82,14 +84,13 @@ export default class TermModel {
   static empty(): TermModel {
     return new TermModel(
       "",
-      "",
-      "",
+      "property",
       "",
       "",
       "",
       new Date(),
       new Date(),
-      "",
+      true,
       ""
     );
   }

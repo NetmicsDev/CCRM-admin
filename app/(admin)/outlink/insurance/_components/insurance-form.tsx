@@ -2,7 +2,7 @@
 
 import { TextField } from "@/app/_components/Input";
 import SelectField from "@/app/_components/Input/select-field";
-import InsuranceModel from "@/app/_models/insurance";
+import InsuranceModel, { InsuranceCategory } from "@/app/_models/insurance";
 import Link from "next/link";
 
 export default function InsuranceForm({
@@ -15,17 +15,19 @@ export default function InsuranceForm({
   onSubmit?: (course: InsuranceModel) => void;
 }) {
   const handleSubmit = async (formData: FormData) => {
-    const newInsurance = InsuranceModel.empty();
-    // new InsuranceModel(
-    //   insurance?.id,
-    //   formData.get("category") as string,
-    //   formData.get("title") as string,
-    //   formData.get("content") as string,
-    //   formData.get("public") as string,
-    //   insurance?.createdAt,
-    //   new Date(),
-    //   formData.get("attachment") as string
-    // );
+    const newInsurance = new InsuranceModel(
+      insurance.id,
+      formData.get("category") as keyof typeof InsuranceCategory,
+      formData.get("insurerName") as string,
+      formData.get("insurerLogo") as string,
+      formData.get("link") as string,
+      "",
+      "",
+      insurance?.createdAt,
+      new Date(),
+      formData.get("public") === "true",
+      1
+    );
     onSubmit(newInsurance);
   };
 
@@ -36,60 +38,47 @@ export default function InsuranceForm({
       </div>
 
       <div className="flex flex-col flex-1 space-y-4">
-        {/* <TextField
-          name="title"
-          label="제목"
-          placeholder="제목을 작성해주세요"
-          value={formData.title}
-          required
-        />
-
-        <TextAreaField
-          name="content"
-          label="내용"
-          placeholder="내용을 작성해주세요"
-          value={formData.content}
-          className="h-24"
-          required
-        /> */}
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectField
             name="category"
             label="카테고리"
             defaultValue={insurance.category}
-            options={[
-              { text: "결제 관련", value: "결제" },
-              { text: "회원 관련", value: "회원" },
-              { text: "오류 관련", value: "오류" },
-              { text: "프로그램 관련", value: "프로그램" },
-              { text: "제휴 관련", value: "제휴" },
-              { text: "기타", value: "기타" },
-            ]}
+            options={Object.entries(InsuranceCategory).map(([key, value]) => ({
+              text: value,
+              value: key,
+            }))}
           />
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={insurance.isPublished ? 1 : 0}
+            defaultValue={insurance.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>
 
-        {/* <FileField
-          name="logo-file"
-          label="파일 업로드"
-          accept="image/*"
-          placeholder={insurance.attachment ? insurance.attachment : "파일을 업로드해주세요"}
-          icon="file-image"
-        /> */}
+        <TextField
+          name="insurerName"
+          label="회사명"
+          placeholder="회사명을 작성해주세요"
+          defaultValue={insurance.insurerName}
+          required
+        />
 
         <TextField
-          name="url"
-          label="URL"
-          placeholder="URL를 입력해주세요"
+          name="insurerLogo"
+          label="회사 로고 링크"
+          placeholder="회사 로고 링크를 입력해주세요"
+          defaultValue={insurance.insurerLogo}
+          required
+        />
+
+        <TextField
+          name="link"
+          label="회사 URL"
+          placeholder="회사 URL를 입력해주세요"
           defaultValue={insurance.link}
           required
         />

@@ -1,8 +1,9 @@
 "use client";
 
 import { TextField } from "@/app/_components/Input";
+import FileUpload from "@/app/_components/Input/file-field";
 import SelectField from "@/app/_components/Input/select-field";
-import CourseModel from "@/app/_models/course";
+import CourseModel, { CourseCategory } from "@/app/_models/course";
 import Link from "next/link";
 
 export default function CourseForm({
@@ -19,15 +20,19 @@ export default function CourseForm({
       course.id,
       formData.get("title") as string,
       formData.get("lecturer") as string,
-      formData.get("category") as string,
+      formData.get("category") as keyof typeof CourseCategory,
       undefined, // Author는 초기화되지 않음
       course.createdAt,
       new Date(),
-      formData.get("public") as string,
-      formData.get("position") as string,
+      formData.get("isPublished") === "true",
+      parseInt(formData.get("position") as string),
       formData.get("url") as string,
-      ""
+      course.attachment
     );
+    newCourse.newAttachemnt = formData.get("attachment") as
+      | File
+      | string
+      | undefined;
     onSubmit(newCourse);
   };
 
@@ -58,10 +63,10 @@ export default function CourseForm({
             name="category"
             label="카테고리"
             defaultValue={course.category}
-            options={[
-              { text: "재테크/투자", value: "재테크/투자" },
-              { text: "기타", value: "기타" },
-            ]}
+            options={Object.entries(CourseCategory).map(([key, value]) => ({
+              text: value,
+              value: key,
+            }))}
           />
         </div>
 
@@ -78,10 +83,10 @@ export default function CourseForm({
           <SelectField
             name="public"
             label="공개여부"
-            defaultValue={course.isPublished ? 1 : 0}
+            defaultValue={course.isPublished ? "true" : "false"}
             options={[
-              { text: "공개", value: 1 },
-              { text: "비공개", value: 0 },
+              { text: "공개", value: "true" },
+              { text: "비공개", value: "false" },
             ]}
           />
         </div>
@@ -94,12 +99,23 @@ export default function CourseForm({
           required
         />
 
-        <TextField
-          name="position"
-          label="레이아웃 위치 설정"
-          placeholder="숫자(,)로 작성해주세요"
-          defaultValue={course.layoutOrder}
-        />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FileUpload
+            name="attachment"
+            label="썸네일 업로드"
+            icon="file-image"
+            accept="image/*"
+            placeholder={course.attachment || "썸네일을 업로드해주세요"}
+          />
+
+          <TextField
+            type="number"
+            name="position"
+            label="레이아웃 위치 설정"
+            placeholder="위치(숫자)를 입력해주세요"
+            defaultValue={course.layoutOrder}
+          />
+        </div>
       </div>
       <div className="flex justify-between ">
         <Link

@@ -37,8 +37,8 @@ export const TermList: React.FC = () => {
 
   const columns = [
     { label: "NO.", key: "id" },
-    { label: "제목", key: "title" },
     { label: "카테고리", key: "category" },
+    { label: "회사명", key: "title" },
     { label: "업데이트 날짜", key: "updatedAt" },
     { label: "", key: "actions" },
   ];

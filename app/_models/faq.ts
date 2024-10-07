@@ -6,29 +6,39 @@ export type FaqDTO = {
   category: string;
   title: string;
   content: string;
-  isPublished: string;
+  isPublished: boolean;
   createdAt: string;
   updatedAt: string;
   attachment: string;
 };
 
+export const FaqCategory = {
+  payment: "결제 관련",
+  member: "회원 관련",
+  error: "오류 관련",
+  program: "프로그램 관련",
+  coalition: "제휴 관련",
+  etc: "기타",
+};
+
 // Model 정의
 export default class FaqModel {
   id: string;
-  category: string;
+  category: keyof typeof FaqCategory;
   title: string;
   content: string;
-  isPublished: string;
+  isPublished: boolean;
   createdAt: Date;
   updatedAt: Date;
   attachment: string;
+  newAttachemnt?: File | string;
 
   constructor(
     id: string,
-    category: string,
+    category: keyof typeof FaqCategory,
     title: string,
     content: string,
-    isPublished: string,
+    isPublished: boolean,
     createdAt: Date,
     updatedAt: Date,
     attachment: string
@@ -43,11 +53,13 @@ export default class FaqModel {
     this.attachment = attachment;
   }
 
+  getCategoryName = (): string => FaqCategory[this.category] ?? "기타";
+
   // DTO에서 FaqModel로 변환
   static fromJson(faqDTO: FaqDTO): FaqModel {
     return new FaqModel(
       faqDTO.id,
-      faqDTO.category,
+      faqDTO.category as keyof typeof FaqCategory,
       faqDTO.title,
       faqDTO.content,
       faqDTO.isPublished,
@@ -71,8 +83,29 @@ export default class FaqModel {
     };
   }
 
+  toFormData(): FormData {
+    const formData = new FormData();
+    formData.append("title", this.title);
+    formData.append("category", this.category);
+    formData.append("content", this.content);
+    formData.append("isPublished", String(this.isPublished));
+    if (this.newAttachemnt) {
+      formData.append("attachment", this.newAttachemnt);
+    }
+    return formData;
+  }
+
   // 빈 인스턴스 반환
   static empty(): FaqModel {
-    return new FaqModel("", "", "", "", "", new Date(), new Date(), "");
+    return new FaqModel(
+      "",
+      "payment",
+      "",
+      "",
+      true,
+      new Date(),
+      new Date(),
+      ""
+    );
   }
 }
