@@ -6,10 +6,10 @@ stages:
 
 variables:
     IMAGE_NAME: "ccrm-admin"
-    IMAGE_VERSION: "0.1.0"
+    IMAGE_VERSION: "0.1.2"
     DOCKER_HOST: tcp://172.17.0.1:2375
     SERVICE_NAME: "ccrm-admin"
-    VOLUME_NAME: "ccrm_admin_data"
+    ENV_PATH: "/home/envs/.ccrm-admin-env"
 
 before_script:
     - echo "Starting CI/CD pipeline"
@@ -31,7 +31,7 @@ deploy:
         - docker stop $SERVICE_NAME || true
         - docker rm $SERVICE_NAME || true
 
-        - docker run -d --name $SERVICE_NAME --network docker-compose_default --mount source=$VOLUME_NAME,target=/app $IMAGE_NAME:$IMAGE_VERSION
+        - docker run -d --name $SERVICE_NAME --network docker-compose_default --mount type=bind,source=$ENV_PATH,target=/app/.env $IMAGE_NAME:$IMAGE_VERSION
     only:
         - main
 
