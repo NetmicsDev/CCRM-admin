@@ -35,6 +35,8 @@ export default function LoginForm() {
     } else {
       setError(data.error?.message ?? "Unknown Error");
     }
+
+    setError(data.error?.message ?? "Unknown Error");
   };
 
   return (

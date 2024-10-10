@@ -107,7 +107,7 @@ export default class InsuranceModel {
       new Date(),
       new Date(),
       true,
-      1
+      1,
     );
   }
 }
