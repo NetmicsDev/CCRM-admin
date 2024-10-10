@@ -7,7 +7,7 @@ import { cookies } from "next/headers";
 
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
-  baseURL: `http://${process.env.NEXT_PUBLIC_SERVER_HOST}:${process.env.NEXT_PUBLIC_SERVER_PORT}/api`, // 기본 API URL 설정
+  baseURL: `https://${process.env.NEXT_PUBLIC_SERVER_HOST}:${process.env.NEXT_PUBLIC_SERVER_PORT}/api`, // 기본 API URL 설정
   timeout: 10000, // 10초 타임아웃 설정
   headers: {
     "Content-Type": "application/json",
@@ -18,7 +18,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = cookies().get("token")?.value; // 쿠키에서 JWT 토큰 가져오기
-    console.log("Interceptor", token);
+    // console.log("Interceptor", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // Authorization 헤더에 토큰 추가
     }
